@@ -57,49 +57,107 @@ export default function HomePage() {
       <Breadcrumb items={[{ label: 'TikTok Tools' }]} />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-tiktok-pink via-purple-500 to-tiktok-cyan text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            TikTok Coin Calculator & Tools
-          </h1>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-            Calculate coin values, compare recharge prices, estimate earnings, and convert gifts to real cash. 
-            All your TikTok money tools in one place.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white text-tiktok-pink hover:bg-gray-100">
-              <a href="#coin-calculator">Start Calculating</a>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-tiktok-pink">
-              <a href="#tools">View All Tools</a>
-            </Button>
+      <section className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+                TikTok Coin Calculator & Tools
+              </h1>
+              <p className="text-xl mb-8 text-gray-600 max-w-2xl">
+                Calculate coin values, compare recharge prices, estimate earnings, and convert gifts to real cash. 
+                All your TikTok money tools in one place.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button asChild size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                  <a href="#coin-calculator">Start Calculating</a>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:border-purple-300 transition-all duration-300">
+                  <a href="#tools">View All Tools</a>
+                </Button>
+              </div>
+            </div>
+            
+            {/* Mockup Section */}
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                    <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                    <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                  </div>
+                  <div className="text-sm text-gray-500">tokrecharge.com</div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-purple-800">TikTok Coins</span>
+                      <span className="text-2xl font-bold text-purple-800">1,000</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-blue-100 to-cyan-100 p-4 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-blue-800">USD Value</span>
+                      <span className="text-2xl font-bold text-blue-800">$13.99</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-green-100 to-emerald-100 p-4 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-green-800">Creator Earns</span>
+                      <span className="text-2xl font-bold text-green-800">$6.99</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-6 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                    <span>Live calculation</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Floating Elements */}
+              <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                <span className="text-2xl">💰</span>
+              </div>
+              <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
+                <span className="text-lg">🎁</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Featured Calculator */}
-      <section id="coin-calculator" className="py-16 bg-white">
+      <section id="coin-calculator" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">TikTok Coin to Currency Calculator</h2>
-              <p className="text-gray-600">Convert TikTok coins to real money instantly</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">TikTok Coin to Currency Calculator</h2>
+              <p className="text-lg text-gray-600">Convert TikTok coins to real money instantly with live exchange rates</p>
             </div>
             
-            <CoinCalculator />
+            <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-8 shadow-xl border border-gray-100">
+              <CoinCalculator />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Tools Grid */}
-      <section id="tools" className="py-16 bg-tiktok-gray">
+      <section id="tools" className="py-20 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">All TikTok Tools</h2>
-            <p className="text-gray-600">Comprehensive suite of calculators and converters</p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">All TikTok Tools</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Comprehensive suite of calculators and converters for TikTok creators and fans</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {tools.map((tool) => (
               <ToolCard key={tool.id} tool={tool} />
             ))}
@@ -108,14 +166,14 @@ export default function HomePage() {
       </section>
 
       {/* Country-Specific Pages */}
-      <section id="countries" className="py-16 bg-white">
+      <section id="countries" className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Country-Specific Pricing</h2>
-            <p className="text-gray-600">TikTok coin rates vary by country. Find your local pricing.</p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Country-Specific Pricing</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">TikTok coin rates vary by country. Find your local pricing and compare costs worldwide.</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {countries.slice(0, 3).map((country) => (
               <CountryCard 
                 key={country.id} 
@@ -128,14 +186,14 @@ export default function HomePage() {
       </section>
 
       {/* Blog Section */}
-      <section id="blog" className="py-16 bg-tiktok-gray">
+      <section id="blog" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">TikTok Money Blog</h2>
-            <p className="text-gray-600">Latest guides and insights about TikTok monetization</p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">TikTok Money Blog</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Latest guides and insights about TikTok monetization, earnings, and creator economy</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {blogPosts.slice(0, 3).map((post) => (
               <BlogCard key={post.id} post={post} />
             ))}
@@ -147,15 +205,15 @@ export default function HomePage() {
       <FAQSection faqs={FAQ_DATA} />
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-tiktok-pink to-tiktok-cyan text-white">
+      <section className="py-20 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Start Using Our TikTok Tools</h2>
-          <p className="text-xl mb-8 opacity-90">Join thousands of creators and fans who use our calculators daily</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Start Using Our TikTok Tools</h2>
+          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">Join thousands of creators and fans who use our calculators daily to maximize their TikTok earnings</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white text-tiktok-pink hover:bg-gray-100">
+            <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
               <a href="#coin-calculator">Calculate Coins Now</a>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-tiktok-pink">
+            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600 transition-all duration-300">
               <a href="#tools">Browse All Tools</a>
             </Button>
           </div>
