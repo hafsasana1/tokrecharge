@@ -1,0 +1,124 @@
+ TikTok Coin to Currency Calculator
+Route: /coin-calculator
+
+Functionality:
+
+Input TikTok coins
+
+Select currency (USD, INR, PKR, etc.)
+
+Output: real-time or fixed conversion (e.g., 1 coin = $0.015 USD)
+
+Use Case: Users check how much coins are worth in real money
+
+SEO Target: tiktok coin calculator, how much is 1000 tiktok coins
+
+2. TikTok Gift Value Estimator
+Route: /gift-value
+
+Functionality:
+
+Select gift from dropdown (Lion, Rose, Rocket, etc.)
+
+Output: number of coins and equivalent currency
+
+Use Case: Shows how much each TikTok gift costs in real cash
+
+SEO Target: tiktok gift value, how much is lion gift on tiktok
+
+3. TikTok Recharge Price Checker
+Route: /recharge-prices
+
+Functionality:
+
+List TikTok coin packages (e.g., 70 coins = $1.09)
+
+Country selector (India, USA, Pakistan, etc.)
+
+Table of coin count + recharge amount + per-coin value
+
+Use Case: Compare coin recharge rates by country
+
+SEO Target: tiktok recharge price, buy tiktok coins in india
+
+4. TikTok Earnings Estimator
+Route: /earnings-estimator
+
+Functionality:
+
+Input number of coins received
+
+Output: estimated cash (after TikTok’s 50% cut)
+
+Use Case: Creators estimate how much they’ve earned from gifts
+
+SEO Target: tiktok live earnings calculator, tiktok coin income
+
+5. TikTok Coins to Diamonds Converter
+Route: /coin-to-diamond
+
+Functionality:
+
+Convert coins to diamonds (internal TikTok currency)
+
+2:1 conversion (example: 2 coins = 1 diamond)
+
+Use Case: Understand backend TikTok currency system
+
+SEO Target: tiktok coins to diamonds
+
+6. TikTok Withdraw Value Tool
+Route: /withdraw-value
+
+Functionality:
+
+Input coins/gifts
+
+Output: Net withdrawable cash after TikTok fee
+
+Use Case: Estimate final amount after withdrawal cuts
+
+SEO Target: tiktok withdrawal calculator
+
+7. TikTok TopUp Comparison Tool
+Route: /topup-compare
+
+Functionality:
+
+Compare TikTok recharge packages from official and third-party sellers
+
+Static info or affiliate link integration
+
+Use Case: Users look for cheapest top-up
+
+SEO Target: buy tiktok coins cheap, tiktok topup
+
+8. Country-Based Coin Rates
+Routes: /coins-in-india, /coins-in-usa, /coins-in-pakistan, etc.
+
+Functionality:
+
+Show recharge options and rates for selected countries
+
+SEO Target: tiktok coin price in india, tiktok coins in pakistan
+
+9. Affiliate Recharge Guide
+Route: /how-to/buy-tiktok-coins
+
+Functionality:
+
+Static content + affiliate link to TikTok recharge options
+
+SEO Target: how to buy tiktok coins, tiktok recharge guide
+
+10. TikTok Gifter Leaderboard (Mocked)
+Route: /top-gifters
+
+Functionality:
+
+Simulated list of top gifter usernames, coins sent, gift types
+
+Use Case: Social proof + engagement
+
+SEO Target: top tiktok gifters
+
