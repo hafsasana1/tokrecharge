@@ -1,0 +1,47 @@
+import { Switch, Route } from "wouter";
+import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import NotFound from "@/pages/not-found";
+import HomePage from "@/pages/HomePage";
+import CoinCalculatorPage from "@/pages/CoinCalculatorPage";
+import GiftValuePage from "@/pages/GiftValuePage";
+import EarningsEstimatorPage from "@/pages/EarningsEstimatorPage";
+import RechargePricesPage from "@/pages/RechargePricesPage";
+import CoinToDiamondPage from "@/pages/CoinToDiamondPage";
+import WithdrawValuePage from "@/pages/WithdrawValuePage";
+import CountryPricingPage from "@/pages/CountryPricingPage";
+import BlogPage from "@/pages/BlogPage";
+import BlogPostPage from "@/pages/BlogPostPage";
+
+function Router() {
+  return (
+    <Switch>
+      <Route path="/" component={HomePage} />
+      <Route path="/coin-calculator" component={CoinCalculatorPage} />
+      <Route path="/gift-value" component={GiftValuePage} />
+      <Route path="/earnings-estimator" component={EarningsEstimatorPage} />
+      <Route path="/recharge-prices" component={RechargePricesPage} />
+      <Route path="/coin-to-diamond" component={CoinToDiamondPage} />
+      <Route path="/withdraw-value" component={WithdrawValuePage} />
+      <Route path="/coins-in-:country" component={CountryPricingPage} />
+      <Route path="/blog" component={BlogPage} />
+      <Route path="/blog/:slug" component={BlogPostPage} />
+      <Route component={NotFound} />
+    </Switch>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Router />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;
