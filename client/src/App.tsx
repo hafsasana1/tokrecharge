@@ -14,6 +14,8 @@ import WithdrawValuePage from "@/pages/WithdrawValuePage";
 import CountryPricingPage from "@/pages/CountryPricingPage";
 import BlogPage from "@/pages/BlogPage";
 import BlogPostPage from "@/pages/BlogPostPage";
+import AdminLoginPage from "@/pages/AdminLoginPage";
+import AdminDashboardPage from "@/pages/AdminDashboardPage";
 
 function Router() {
   return (
@@ -28,6 +30,9 @@ function Router() {
       <Route path="/coins-in-:country" component={CountryPricingPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
+      <Route path="/admin/login" component={AdminLoginPage} />
+      <Route path="/admin/dashboard" component={AdminDashboardPage} />
+      <Route path="/admin/*" component={AdminDashboardPage} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -1,0 +1,114 @@
+Create a full-stack backend for a web app named TokRechargeTools using Node.js + Express (or Flask). Include a secure and mobile-responsive modern admin panel using React + TailwindCSS or Bootstrap.
+
+The project is a multi-tool platform for TikTok users to check coin-to-USD conversion, recharge prices by country, gift value estimation, and earnings calculators. You must build the full backend with APIs and a powerful admin panel that includes the following:
+
+1. ✅ **Secure Admin Authentication**
+   - JWT-based admin login system
+   - Session management
+   - Password reset via email or token
+
+2. ⚙️ **Admin Panel Functionality**
+   - Dashboard overview (tool usage, latest updates)
+   - Responsive layout with sidebar menu
+   - Light/Dark mode toggle
+
+3. 📊 **Global Website Settings Management**
+   - Manage and store:
+     - Website title
+     - Meta title & meta description
+     - Logo (image upload)
+     - Favicon (image upload)
+     - Google Analytics code
+     - Google Search Console code
+     - Facebook Pixel code
+     - Verification meta tags
+   - Settings should auto-inject into the frontend `<head>`
+
+4. 🌍 **Realtime Visitor Tracker**
+   - Show daily visitors with:
+     - IP address
+     - Country
+     - City (GeoIP API)
+     - Page visited
+     - Time of visit
+   - Use a lightweight tracking system and save logs in DB
+   - Display charts for top countries and most visited tools
+
+5. 💰 **Google AdSense Ads Manager**
+   - Admin can:
+     - Add, edit, or remove AdSense ad units
+     - Select location (e.g., `header`, `sidebar`, `footer`, `inside-tool`)
+     - Toggle ads visibility on/off
+   - Dynamically inject ads into the frontend pages
+
+6. 📝 **SEO-Optimized Blog System**
+   - Blog module inside admin panel
+   - WYSIWYG editor (like Quill.js or TinyMCE)
+   - Blog fields:
+     - Title
+     - SEO slug
+     - Meta title, meta description
+     - Category
+     - Tags
+     - Cover image
+     - Status: published/draft
+   - Admin can:
+     - Add/Edit/Delete blog posts
+     - Schedule future posts
+     - Preview blog posts before publishing
+   - Blog should support:
+     - Rich text, images, code, tables
+     - Auto-generated SEO-friendly URLs
+     - Auto sitemap updates (optional)
+
+7. 📦 **Tool Data Managers**
+   - TikTok Coin Conversion Manager:
+     - Add/edit rates (1 coin = $0.015)
+     - Multi-currency support (USD, INR, PKR)
+   - Recharge Prices Manager:
+     - CRUD recharge packages per country
+   - TikTok Gift Value Manager:
+     - CRUD gift values (Lion, Rocket, etc.)
+   - TikTok Commission Manager:
+     - Set and update commission % (e.g., 50% cut)
+   - Withdraw Estimator Rules:
+     - Define conversion + payout rules
+
+8. 🌐 **API Integration & Structure**
+   - Public API endpoints:
+     - `/api/coin-rates` – returns coin conversion rates
+     - `/api/recharge-prices/:country` – returns recharge prices
+     - `/api/gift-values` – returns TikTok gift values
+     - `/api/earnings` – accepts coin input, returns earnings value
+   - Admin-only endpoints for full CRUD operations
+   - Rate-limiting, input sanitization, auth middleware
+
+9. 📁 **Database Models (MongoDB/MySQL)**
+   - Admin user
+   - Website settings
+   - Blog posts
+   - Coin rates
+   - Recharge packages
+   - Gift values
+   - Ad placements
+   - Visitor logs
+
+10. 🔐 **Security**
+    - All admin routes protected with middleware
+    - CSRF tokens on forms
+    - Rate-limited APIs
+    - Sanitized inputs, image/file uploads validated
+
+11. 📲 **Extras (Optional but Preferred)**
+    - Admin notification on blog publish
+    - Export visitor analytics as CSV
+    - Search in blog + tool logs
+    - Filter tools or rates by country or category
+    - Auto sitemap XML generation
+
+Output:
+- Complete backend folder
+- Fully functional admin panel (`/admin`)
+- REST APIs connected to frontend
+- Configurable `.env` with DB and secret values
+- Live visitors chart, Ad manager, Blog system, Global SEO control
