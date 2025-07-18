@@ -15,6 +15,24 @@ import {
   MapPin,
   Eye
 } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  Area,
+  AreaChart
+} from 'recharts';
+
+const COLORS = ['#FF1744', '#9C27B0', '#3F51B5', '#2196F3', '#009688', '#4CAF50'];
 
 export default function AdminDashboardPage() {
   const [, setLocation] = useLocation();
@@ -139,7 +157,106 @@ export default function AdminDashboardPage() {
           </Card>
         </div>
 
-        {/* Charts and Analytics */}
+        {/* Modern Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Daily Visitors Trend Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <TrendingUp className="w-5 h-5 mr-2" />
+                Daily Visitors Trend
+              </CardTitle>
+              <CardDescription>Visitor traffic over the last 7 days</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={dashboardData?.analytics?.dailyVisitors?.map((item: any) => ({
+                  date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                  visitors: item.count
+                })) || []}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Area 
+                    type="monotone" 
+                    dataKey="visitors" 
+                    stroke="#FF1744" 
+                    fill="url(#colorGradient)" 
+                  />
+                  <defs>
+                    <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#FF1744" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#FF1744" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                </AreaChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Country Distribution Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Globe className="w-5 h-5 mr-2" />
+                Visitor Countries
+              </CardTitle>
+              <CardDescription>Geographic distribution of visitors</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={dashboardData?.analytics?.topCountries?.slice(0, 6).map((item: any, index: number) => ({
+                      ...item,
+                      color: COLORS[index % COLORS.length]
+                    })) || []}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ country, count }) => `${country}: ${count}`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="count"
+                  >
+                    {(dashboardData?.analytics?.topCountries?.slice(0, 6) || []).map((entry: any, index: number) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Page Views Bar Chart */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <BarChart3 className="w-5 h-5 mr-2" />
+              Page Performance
+            </CardTitle>
+            <CardDescription>Most popular pages by view count</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={dashboardData?.analytics?.topPages?.slice(0, 8).map((item: any) => ({
+                page: item.page.replace(/^\//, '') || 'Home',
+                views: item.count
+              })) || []}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="page" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="views" fill="#9C27B0" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Charts and Analytics - List View */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Top Countries */}
           <Card>
