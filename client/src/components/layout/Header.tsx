@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, Coins } from 'lucide-react';
+import { Menu, X, Coins, Calculator, BookOpen, Globe, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
@@ -9,9 +9,10 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navigation = [
-    { name: 'Tools', href: '#tools' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Countries', href: '#countries' },
+    { name: 'Tools', href: '#tools', icon: Calculator },
+    { name: 'Blog', href: '/blog', icon: BookOpen },
+    { name: 'Countries', href: '#countries', icon: Globe },
+    { name: 'Trends', href: '#trends', icon: TrendingUp },
   ];
 
   return (
@@ -29,15 +30,19 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium hover:scale-105"
-              >
-                {item.name}
-              </a>
-            ))}
+            {navigation.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium hover:scale-105 group"
+                >
+                  <Icon className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+                  <span>{item.name}</span>
+                </a>
+              );
+            })}
           </div>
 
           {/* Mobile Navigation */}
@@ -50,16 +55,20 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <div className="flex flex-col space-y-6 mt-8">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="text-gray-600 hover:text-purple-600 transition-colors duration-300 text-lg font-medium"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                {navigation.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className="flex items-center space-x-3 text-gray-600 hover:text-purple-600 transition-colors duration-300 text-lg font-medium"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span>{item.name}</span>
+                    </a>
+                  );
+                })}
               </div>
             </SheetContent>
           </Sheet>

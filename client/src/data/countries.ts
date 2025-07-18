@@ -88,5 +88,95 @@ export const countriesData = [
     coinRate: "2.200000",
     flag: "🇯🇵",
     isActive: true
+  },
+  {
+    id: 11,
+    name: "Mexico",
+    code: "MX",
+    currency: "MXN",
+    coinRate: "0.270000",
+    flag: "🇲🇽",
+    isActive: true
+  },
+  {
+    id: 12,
+    name: "South Korea",
+    code: "KR",
+    currency: "KRW",
+    coinRate: "20.500000",
+    flag: "🇰🇷",
+    isActive: true
+  },
+  {
+    id: 13,
+    name: "Turkey",
+    code: "TR",
+    currency: "TRY",
+    coinRate: "0.450000",
+    flag: "🇹🇷",
+    isActive: true
+  },
+  {
+    id: 14,
+    name: "Indonesia",
+    code: "ID",
+    currency: "IDR",
+    coinRate: "230.000000",
+    flag: "🇮🇩",
+    isActive: true
+  },
+  {
+    id: 15,
+    name: "Philippines",
+    code: "PH",
+    currency: "PHP",
+    coinRate: "0.850000",
+    flag: "🇵🇭",
+    isActive: true
+  },
+  {
+    id: 16,
+    name: "Thailand",
+    code: "TH",
+    currency: "THB",
+    coinRate: "0.550000",
+    flag: "🇹🇭",
+    isActive: true
+  },
+  {
+    id: 17,
+    name: "Vietnam",
+    code: "VN",
+    currency: "VND",
+    coinRate: "370.000000",
+    flag: "🇻🇳",
+    isActive: true
+  },
+  {
+    id: 18,
+    name: "Bangladesh",
+    code: "BD",
+    currency: "BDT",
+    coinRate: "1.650000",
+    flag: "🇧🇩",
+    isActive: true
+  },
+  {
+    id: 19,
+    name: "Nigeria",
+    code: "NG",
+    currency: "NGN",
+    coinRate: "12.500000",
+    flag: "🇳🇬",
+    isActive: true
+  },
+  {
+    id: 20,
+    name: "Egypt",
+    code: "EG",
+    currency: "EGP",
+    coinRate: "0.470000",
+    flag: "🇪🇬",
+    isActive: true
   }
 ];

@@ -11,6 +11,8 @@ import ToolCard from '@/components/common/ToolCard';
 import CountryCard from '@/components/common/CountryCard';
 import BlogCard from '@/components/common/BlogCard';
 import FAQSection from '@/components/common/FAQSection';
+import LiveCalculatorDemo from '@/components/hero/LiveCalculatorDemo';
+import CountryPricingSection from '@/components/sections/CountryPricingSection';
 import { FAQ_DATA } from '@/lib/constants';
 import type { Tool, Country, BlogPost } from '@shared/schema';
 
@@ -59,76 +61,27 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 py-20">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-center lg:text-left">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
-                TikTok Coin Calculator & Tools
-              </h1>
-              <p className="text-xl mb-8 text-gray-600 max-w-2xl">
-                Calculate coin values, compare recharge prices, estimate earnings, and convert gifts to real cash. 
-                All your TikTok money tools in one place.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button asChild size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                  <a href="#coin-calculator">Start Calculating</a>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:border-purple-300 transition-all duration-300">
-                  <a href="#tools">View All Tools</a>
-                </Button>
-              </div>
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+              TikTok Coin Calculator & Tools
+            </h1>
+            <p className="text-xl mb-8 text-gray-600 max-w-3xl mx-auto">
+              Calculate coin values, compare recharge prices, estimate earnings, and convert gifts to real cash. 
+              All your TikTok money tools in one place with live data updates.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Button asChild size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <a href="#coin-calculator">Start Calculating</a>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:border-purple-300 transition-all duration-300">
+                <a href="#tools">View All Tools</a>
+              </Button>
             </div>
-            
-            {/* Mockup Section */}
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  </div>
-                  <div className="text-sm text-gray-500">tokrecharge.com</div>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-purple-800">TikTok Coins</span>
-                      <span className="text-2xl font-bold text-purple-800">1,000</span>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gradient-to-r from-blue-100 to-cyan-100 p-4 rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-blue-800">USD Value</span>
-                      <span className="text-2xl font-bold text-blue-800">$13.99</span>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gradient-to-r from-green-100 to-emerald-100 p-4 rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-green-800">Creator Earns</span>
-                      <span className="text-2xl font-bold text-green-800">$6.99</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-6 p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                    <span>Live calculation</span>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-2xl">💰</span>
-              </div>
-              <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-lg">🎁</span>
-              </div>
-            </div>
+          </div>
+          
+          {/* Live Calculator Demo */}
+          <div className="mt-12">
+            <LiveCalculatorDemo />
           </div>
         </div>
       </section>
@@ -166,24 +119,7 @@ export default function HomePage() {
       </section>
 
       {/* Country-Specific Pages */}
-      <section id="countries" className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Country-Specific Pricing</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">TikTok coin rates vary by country. Find your local pricing and compare costs worldwide.</p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {countries.slice(0, 3).map((country) => (
-              <CountryCard 
-                key={country.id} 
-                country={country}
-                samplePrice={`70 coins = ${country.currency} ${(70 * parseFloat(country.coinRate)).toFixed(2)}`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <CountryPricingSection />
 
       {/* Blog Section */}
       <section id="blog" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">

@@ -40,12 +40,12 @@ export default function CoinCalculator() {
   });
 
   return (
-    <Card className="shadow-lg border">
+    <Card className="shadow-2xl border-0 bg-white rounded-2xl overflow-hidden">
       <CardContent className="p-8">
         <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <Label htmlFor="coin-amount" className="block text-sm font-medium text-gray-700 mb-2">
-              <Coins className="inline w-4 h-4 text-tiktok-pink mr-2" />
+          <div className="relative">
+            <Label htmlFor="coin-amount" className="block text-sm font-semibold text-gray-800 mb-3">
+              <Coins className="inline w-5 h-5 text-pink-600 mr-2" />
               TikTok Coins
             </Label>
             <Input
@@ -54,17 +54,17 @@ export default function CoinCalculator() {
               placeholder="Enter coin amount"
               value={coinAmount}
               onChange={handleCoinAmountChange}
-              className="text-lg"
+              className="text-xl font-semibold h-14 border-2 border-gray-200 focus:border-purple-500 rounded-xl"
             />
           </div>
 
-          <div>
-            <Label htmlFor="currency" className="block text-sm font-medium text-gray-700 mb-2">
-              <Globe className="inline w-4 h-4 text-tiktok-cyan mr-2" />
+          <div className="relative">
+            <Label htmlFor="currency" className="block text-sm font-semibold text-gray-800 mb-3">
+              <Globe className="inline w-5 h-5 text-cyan-600 mr-2" />
               Currency
             </Label>
             <Select value={selectedCurrency} onValueChange={handleCurrencyChange}>
-              <SelectTrigger>
+              <SelectTrigger className="h-14 border-2 border-gray-200 focus:border-purple-500 rounded-xl text-lg font-semibold">
                 <SelectValue placeholder="Select currency" />
               </SelectTrigger>
               <SelectContent>
@@ -79,22 +79,22 @@ export default function CoinCalculator() {
           </div>
         </div>
 
-        <div className="mt-8 p-6 bg-gradient-to-r from-tiktok-pink to-tiktok-cyan rounded-lg text-white">
+        <div className="mt-8 p-8 bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 rounded-2xl text-white shadow-2xl">
           <div className="text-center">
-            <div className="text-sm opacity-90 mb-2">Estimated Value</div>
-            <div className="text-4xl font-bold">
+            <div className="text-sm opacity-90 mb-3 font-medium">💰 Estimated Value</div>
+            <div className="text-5xl font-bold mb-2 tracking-tight">
               {formatCurrency(calculatedValue, selectedCurrency)}
             </div>
-            <div className="text-sm opacity-90 mt-2">
+            <div className="text-sm opacity-90 mt-3 bg-black/20 rounded-full px-4 py-2 inline-block">
               1 TikTok Coin ≈ {formatCurrency(EXCHANGE_RATES[selectedCurrency], selectedCurrency)}
             </div>
           </div>
         </div>
 
-        <div className="mt-6 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <Button 
             onClick={handleCalculate}
-            className="bg-tiktok-pink hover:bg-pink-600 text-white px-8 py-3 rounded-lg font-semibold"
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
             Calculate Value
           </Button>
