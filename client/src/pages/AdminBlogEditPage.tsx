@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import RichTextEditor from "@/components/editor/RichTextEditor";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -91,7 +92,8 @@ export default function AdminBlogEditPage() {
       twitterDescription: "",
       twitterImage: "",
       publishedAt: "",
-      isPublished: false
+      isPublished: false,
+      coverImage: ""
     }
   });
 
@@ -115,7 +117,8 @@ export default function AdminBlogEditPage() {
         twitterDescription: blogPost.twitterDescription || "",
         twitterImage: blogPost.twitterImage || "",
         publishedAt: blogPost.publishedAt ? new Date(blogPost.publishedAt).toISOString().slice(0, 16) : "",
-        isPublished: blogPost.status === 'published'
+        isPublished: blogPost.status === 'published',
+        coverImage: blogPost.coverImage || ""
       });
     }
   }, [blogPost, form]);
@@ -284,11 +287,27 @@ export default function AdminBlogEditPage() {
                           <FormItem>
                             <FormLabel>Post Content *</FormLabel>
                             <FormControl>
-                              <Textarea 
-                                placeholder="Write your blog post content here..."
-                                rows={20}
+                              <RichTextEditor
+                                value={field.value}
+                                onChange={field.onChange}
+                                placeholder="Write your blog post content here... Use the toolbar above to format text, add headings, bullets, images, and more!"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="coverImage"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Featured Image URL</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="https://example.com/featured-image.jpg (optional)"
                                 {...field}
-                                className="min-h-[500px] font-mono text-sm"
                               />
                             </FormControl>
                             <FormMessage />
