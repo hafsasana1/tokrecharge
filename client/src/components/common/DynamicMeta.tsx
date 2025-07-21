@@ -98,33 +98,37 @@ export default function DynamicMeta() {
       document.body.appendChild(noscript);
     }
 
+    // AdSense: Update existing script src if client ID changed
     if (settings?.googleAdsense && settings.googleAdsense.trim()) {
-      // Remove existing AdSense scripts
-      const existingAdsense = document.querySelectorAll('script[data-adsense="true"]');
-      existingAdsense.forEach(script => script.remove());
-      
-      // Handle both full script tags and client IDs
+      let clientId = '';
       if (settings.googleAdsense.includes('<script')) {
-        // Full script tag provided - extract and inject
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = settings.googleAdsense;
-        const scriptElement = tempDiv.querySelector('script');
-        if (scriptElement) {
-          const newScript = document.createElement('script');
-          newScript.async = scriptElement.async;
-          newScript.src = scriptElement.src;
-          newScript.crossOrigin = scriptElement.crossOrigin || 'anonymous';
-          newScript.setAttribute('data-adsense', 'true');
-          document.head.appendChild(newScript);
-        }
+        // Extract client ID from full script tag
+        const match = settings.googleAdsense.match(/client=([^"&\s\n]+)/);
+        clientId = match ? match[1] : '';
       } else if (settings.googleAdsense.startsWith('ca-')) {
-        // Client ID provided - create script
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.googleAdsense}`;
-        script.crossOrigin = 'anonymous';
-        script.setAttribute('data-adsense', 'true');
-        document.head.appendChild(script);
+        // Direct client ID
+        clientId = settings.googleAdsense.trim();
+      }
+      
+      if (clientId) {
+        // Remove existing dynamic AdSense scripts
+        const existingAdsense = document.querySelectorAll('script[data-adsense="true"]');
+        existingAdsense.forEach(script => script.remove());
+        
+        // Update or add new AdSense script
+        const existingStaticScript = document.querySelector('script[src*="adsbygoogle.js"]');
+        if (existingStaticScript) {
+          // Update existing static script
+          existingStaticScript.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
+        } else {
+          // Add new script if none exists
+          const script = document.createElement('script');
+          script.async = true;
+          script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
+          script.crossOrigin = 'anonymous';
+          script.setAttribute('data-adsense', 'true');
+          document.head.appendChild(script);
+        }
       }
     }
   }, [settings]);
@@ -145,6 +149,27 @@ export default function DynamicMeta() {
         <meta name="google-site-verification" content={settings.googleSearchConsole} />
       )}
       
+      {/* AdSense Script in Head - Extract client ID properly */}
+      {settings.googleAdsense && settings.googleAdsense.includes('ca-pub') && (() => {
+        let clientId = '';
+        if (settings.googleAdsense.includes('<script')) {
+          // Extract client ID from full script tag
+          const match = settings.googleAdsense.match(/client=([^"&\s\n]+)/);
+          clientId = match ? match[1] : '';
+        } else if (settings.googleAdsense.startsWith('ca-')) {
+          // Direct client ID
+          clientId = settings.googleAdsense.trim();
+        }
+        
+        return clientId ? (
+          <script 
+            async 
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
+            crossOrigin="anonymous"
+          />
+        ) : null;
+      })()}
+
       {/* Custom Verification Meta Tags */}
       {settings.verificationMeta && 
         settings.verificationMeta.split('\n').map((tag, index) => {
