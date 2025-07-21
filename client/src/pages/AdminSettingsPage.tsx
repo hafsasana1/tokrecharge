@@ -70,8 +70,12 @@ export default function AdminSettingsPage() {
       section: "Analytics",
       icon: BarChart3,
       settings: [
-        { key: "googleAnalytics", label: "Google Analytics ID", type: "text", description: "GA tracking ID" },
-        { key: "googleTagManager", label: "Google Tag Manager ID", type: "text", description: "GTM container ID" },
+        { key: "googleAnalytics", label: "Google Analytics ID", type: "text", description: "GA tracking ID (e.g., G-XXXXXXXXXX)" },
+        { key: "googleTagManager", label: "Google Tag Manager ID", type: "text", description: "GTM container ID (e.g., GTM-XXXXXXX)" },
+        { key: "googleSearchConsole", label: "Google Search Console Verification", type: "text", description: "Meta verification code for GSC" },
+        { key: "googleAdsense", label: "Google AdSense Code", type: "textarea", description: "AdSense verification or auto ads code" },
+        { key: "facebookPixel", label: "Facebook Pixel ID", type: "text", description: "Facebook Pixel tracking ID" },
+        { key: "verificationMeta", label: "Custom Verification Meta Tags", type: "textarea", description: "Additional verification meta tags (one per line)" },
       ]
     },
     {
