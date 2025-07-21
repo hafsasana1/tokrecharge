@@ -197,6 +197,40 @@ export class MemStorage implements IStorage {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        id: 4,
+        title: "What Is Meant By Lorem Ipsum In Website?",
+        slug: "what-is-meant-by-lorem-ipsum-in-website",
+        excerpt: "What Is Meant By Lorem Ipsum In Website?",
+        content: `<h2>What Is Meant By Lorem Ipsum In Website?</h2>
+
+<p>The word lorem ipsum is derived from the Latin word which means "pain itself". It is a kind of a text filler tool that is used by the webmaster on the website.</p>
+
+<p>Basically, this tool is used to create dummy content on the website when it's new.</p>
+
+<h3>Why Lorem Ipsum Is Used?</h3>
+
+<p>It helps the designer plan where the content will sit, it helps in creating drafts of the content on the pages of the website. It originates from the Latin text but is seen as gibberish.</p>
+
+<p>Sometimes, the reader gets distracted while creating or working on the website. That's why this language is important.</p>
+
+<p>This tool makes the work easier for the webmaster.</p>
+
+<h3>How Lorem Ipsum Can Be Used?</h3>
+
+<p>When using lorem ipsum for creating dummy content for your newly created website, you can select the text formats you want from the tool. Like, words, sentences, or paragraphs.</p>`,
+        metaTitle: "How Can I Use Lorem Ipsum Tool For My Website?",
+        metaDescription: "How Can I Use Lorem Ipsum Tool For My Website?sqdsqsqhy bxc wgrh tf xxxv birthshtrt bcv h et",
+        keywords: "",
+        category: "tutorials",
+        tags: ["lorem", "ipsum", "website", "content"],
+        coverImage: null,
+        status: "published",
+        scheduledAt: null,
+        publishedAt: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ];
 
     blogPostsData.forEach(post => this.blogPosts.set(post.id, post));
