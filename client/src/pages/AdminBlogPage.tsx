@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import AdminLayout from "@/components/layout/AdminLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -11,27 +11,21 @@ import {
   Trash2, 
   Search,
   Eye,
-  Calendar,
-  ArrowLeft
+  Calendar
 } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function AdminBlogPage() {
-  const [, setLocation] = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
-  
   const token = localStorage.getItem("admin_token");
-  if (!token) {
-    setLocation("/admin/login");
-    return null;
-  }
 
   const { data: blogPosts, isLoading } = useQuery({
     queryKey: ["/api/admin/blog"],
     queryFn: async () => {
-      return await fetch("/api/admin/blog", {
+      const response = await fetch("/api/admin/blog", {
         headers: { "Authorization": `Bearer ${token}` },
-      }).then(res => res.json());
+      });
+      return response.json();
     },
   });
 
@@ -54,47 +48,30 @@ export default function AdminBlogPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-tiktok-pink mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading blog posts...</p>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading blog posts...</p>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                onClick={() => setLocation("/admin/dashboard")}
-                className="flex items-center"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
-              <h1 className="text-xl font-semibold text-gray-900">Blog Management</h1>
-            </div>
-            <Button 
-              onClick={() => setLocation("/admin/blog/new")}
-              className="bg-gradient-to-r from-tiktok-pink to-tiktok-cyan hover:from-tiktok-pink/90 hover:to-tiktok-cyan/90"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              New Post
-            </Button>
-          </div>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900">Blog Management</h1>
+          <Button className="bg-orange-500 hover:bg-orange-600">
+            <Plus className="w-4 h-4 mr-2" />
+            New Post
+          </Button>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Filters */}
-        <div className="mb-6 flex items-center space-x-4">
+        {/* Search */}
+        <div className="flex items-center space-x-4">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
@@ -116,11 +93,10 @@ export default function AdminBlogPage() {
                     {post.status}
                   </Badge>
                   <div className="flex space-x-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => setLocation(`/admin/blog/edit/${post.id}`)}
-                    >
+                    <Button size="sm" variant="outline">
+                      <Eye className="w-3 h-3" />
+                    </Button>
+                    <Button size="sm" variant="outline">
                       <Edit className="w-3 h-3" />
                     </Button>
                     <Button 
@@ -133,30 +109,17 @@ export default function AdminBlogPage() {
                     </Button>
                   </div>
                 </div>
-                <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
-                <CardDescription className="line-clamp-3">{post.excerpt}</CardDescription>
+                <CardTitle className="text-lg">{post.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <div className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-1" />
-                    {new Date(post.createdAt).toLocaleDateString()}
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                    <Calendar className="w-4 h-4" />
+                    <span>{new Date(post.publishedAt || post.createdAt).toLocaleDateString()}</span>
                   </div>
-                  <div className="flex items-center">
-                    <Eye className="w-4 h-4 mr-1" />
-                    {post.category}
-                  </div>
+                  <Badge variant="outline">{post.category}</Badge>
+                  <p className="text-sm text-gray-600 line-clamp-3">{post.excerpt}</p>
                 </div>
-                {post.status === 'published' && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="mt-3 w-full"
-                    onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
-                  >
-                    View Live Post
-                  </Button>
-                )}
               </CardContent>
             </Card>
           ))}
@@ -164,17 +127,10 @@ export default function AdminBlogPage() {
 
         {filteredPosts.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-gray-400 text-lg">No blog posts found</div>
-            <Button 
-              onClick={() => setLocation("/admin/blog/new")}
-              className="mt-4 bg-gradient-to-r from-tiktok-pink to-tiktok-cyan hover:from-tiktok-pink/90 hover:to-tiktok-cyan/90"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Your First Post
-            </Button>
+            <p className="text-gray-500">No blog posts found.</p>
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

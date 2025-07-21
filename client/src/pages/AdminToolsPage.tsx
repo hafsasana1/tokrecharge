@@ -14,7 +14,6 @@ import {
   Plus, 
   Edit, 
   Trash2, 
-  ArrowLeft,
   Calculator,
   Settings,
   Eye
@@ -22,15 +21,9 @@ import {
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function AdminToolsPage() {
-  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isCreating, setIsCreating] = useState(false);
-  
   const token = localStorage.getItem("admin_token");
-  if (!token) {
-    setLocation("/admin/login");
-    return null;
-  }
 
   const { data: tools, isLoading } = useQuery({
     queryKey: ["/api/tools"],
@@ -84,10 +77,9 @@ export default function AdminToolsPage() {
       slug: "",
       description: "",
       icon: "",
-      color: "",
       category: "",
-      isActive: true,
-    },
+      isActive: true
+    }
   });
 
   const onSubmit = (data: any) => {
@@ -96,70 +88,37 @@ export default function AdminToolsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-tiktok-pink mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading tools...</p>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading tools...</p>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
-  const categories = [
-    { key: "calculator", label: "Calculator" },
-    { key: "converter", label: "Converter" },
-    { key: "comparison", label: "Comparison" },
-    { key: "utility", label: "Utility" },
-  ];
-
-  const iconOptions = [
-    "calculator", "credit-card", "chart-line", "gem", "money-bill-wave", "gift", "coins", "diamond"
-  ];
-
-  const colorOptions = [
-    "from-tiktok-pink to-tiktok-cyan",
-    "from-purple-500 to-blue-500",
-    "from-green-500 to-tiktok-cyan",
-    "from-orange-500 to-red-500",
-    "from-blue-500 to-purple-500",
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                onClick={() => setLocation("/admin/dashboard")}
-                className="flex items-center"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
-              <h1 className="text-xl font-semibold text-gray-900">Manage Tools</h1>
-            </div>
-            <Button 
-              onClick={() => setIsCreating(!isCreating)}
-              className="bg-gradient-to-r from-tiktok-pink to-tiktok-cyan hover:from-tiktok-pink/90 hover:to-tiktok-cyan/90"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              {isCreating ? "Cancel" : "New Tool"}
-            </Button>
-          </div>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900">Tools Management</h1>
+          <Button 
+            onClick={() => setIsCreating(!isCreating)}
+            className="bg-orange-500 hover:bg-orange-600"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            {isCreating ? "Cancel" : "New Tool"}
+          </Button>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Create Tool Form */}
         {isCreating && (
-          <Card className="mb-8">
+          <Card>
             <CardHeader>
               <CardTitle>Create New Tool</CardTitle>
-              <CardDescription>Add a new calculator or utility tool to your website</CardDescription>
+              <CardDescription>Add a new calculator tool to the platform</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -172,7 +131,7 @@ export default function AdminToolsPage() {
                         <FormItem>
                           <FormLabel>Tool Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g., Coin Calculator" {...field} />
+                            <Input placeholder="Coin Calculator" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -186,7 +145,7 @@ export default function AdminToolsPage() {
                         <FormItem>
                           <FormLabel>URL Slug</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g., coin-calculator" {...field} />
+                            <Input placeholder="coin-calculator" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -202,9 +161,8 @@ export default function AdminToolsPage() {
                         <FormLabel>Description</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Brief description of what this tool does..." 
+                            placeholder="Convert TikTok coins to real money..."
                             {...field} 
-                            rows={3}
                           />
                         </FormControl>
                         <FormMessage />
@@ -212,28 +170,7 @@ export default function AdminToolsPage() {
                     )}
                   />
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="category"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Category</FormLabel>
-                          <FormControl>
-                            <select {...field} className="w-full p-2 border rounded-md">
-                              <option value="">Select category...</option>
-                              {categories.map(cat => (
-                                <option key={cat.key} value={cat.key}>
-                                  {cat.label}
-                                </option>
-                              ))}
-                            </select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="icon"
@@ -241,14 +178,7 @@ export default function AdminToolsPage() {
                         <FormItem>
                           <FormLabel>Icon</FormLabel>
                           <FormControl>
-                            <select {...field} className="w-full p-2 border rounded-md">
-                              <option value="">Select icon...</option>
-                              {iconOptions.map(icon => (
-                                <option key={icon} value={icon}>
-                                  {icon}
-                                </option>
-                              ))}
-                            </select>
+                            <Input placeholder="Calculator" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -257,19 +187,12 @@ export default function AdminToolsPage() {
 
                     <FormField
                       control={form.control}
-                      name="color"
+                      name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Color Scheme</FormLabel>
+                          <FormLabel>Category</FormLabel>
                           <FormControl>
-                            <select {...field} className="w-full p-2 border rounded-md">
-                              <option value="">Select colors...</option>
-                              {colorOptions.map((color, index) => (
-                                <option key={index} value={color}>
-                                  Gradient {index + 1}
-                                </option>
-                              ))}
-                            </select>
+                            <Input placeholder="converter" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -280,7 +203,7 @@ export default function AdminToolsPage() {
                   <Button 
                     type="submit" 
                     disabled={createMutation.isPending}
-                    className="bg-gradient-to-r from-tiktok-pink to-tiktok-cyan hover:from-tiktok-pink/90 hover:to-tiktok-cyan/90"
+                    className="bg-orange-500 hover:bg-orange-600"
                   >
                     {createMutation.isPending ? "Creating..." : "Create Tool"}
                   </Button>
@@ -292,7 +215,7 @@ export default function AdminToolsPage() {
 
         {/* Tools Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools?.map((tool: any) => (
+          {(tools || []).map((tool: any) => (
             <Card key={tool.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex justify-between items-start">
@@ -305,11 +228,7 @@ export default function AdminToolsPage() {
                     </Badge>
                   </div>
                   <div className="flex space-x-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => window.open(`/${tool.slug}`, '_blank')}
-                    >
+                    <Button size="sm" variant="outline">
                       <Eye className="w-3 h-3" />
                     </Button>
                     <Button 
@@ -332,18 +251,8 @@ export default function AdminToolsPage() {
                     <p className="text-sm font-mono">/{tool.slug}</p>
                   </div>
                   
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600">Details</p>
-                    <div className="flex items-center space-x-4 text-sm">
-                      <span>Icon: {tool.icon}</span>
-                      <span>Category: {tool.category}</span>
-                    </div>
-                  </div>
-
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
-                      Status: {tool.isActive ? "Active" : "Inactive"}
-                    </span>
+                    <span className="text-sm font-medium">Status</span>
                     <Switch
                       checked={tool.isActive}
                       onCheckedChange={(checked) => 
@@ -357,21 +266,14 @@ export default function AdminToolsPage() {
           ))}
         </div>
 
-        {(!tools || tools.length === 0) && !isCreating && (
+        {(!tools || tools.length === 0) && (
           <div className="text-center py-12">
-            <Calculator className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <div className="text-gray-400 text-lg mb-2">No tools found</div>
-            <p className="text-gray-500 mb-4">Create calculator and utility tools for your users</p>
-            <Button 
-              onClick={() => setIsCreating(true)}
-              className="bg-gradient-to-r from-tiktok-pink to-tiktok-cyan hover:from-tiktok-pink/90 hover:to-tiktok-cyan/90"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Your First Tool
-            </Button>
+            <Calculator className="mx-auto h-12 w-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">No tools</h3>
+            <p className="mt-1 text-sm text-gray-500">Get started by creating a new tool.</p>
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

@@ -14,44 +14,38 @@ import {
   Plus, 
   Edit, 
   Trash2, 
-  ArrowLeft,
   TrendingUp,
-  MapPin,
+  Settings,
   Eye
 } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function AdminAdsPage() {
-  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isCreating, setIsCreating] = useState(false);
-  
   const token = localStorage.getItem("admin_token");
-  if (!token) {
-    setLocation("/admin/login");
-    return null;
-  }
 
   const { data: ads, isLoading } = useQuery({
-    queryKey: ["/api/admin/adsense"],
+    queryKey: ["/api/admin/ads"],
     queryFn: async () => {
-      return await fetch("/api/admin/adsense", {
+      const response = await fetch("/api/admin/ads", {
         headers: { "Authorization": `Bearer ${token}` },
-      }).then(res => res.json());
+      });
+      return response.json();
     },
   });
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
-      await apiRequest("/api/admin/adsense", {
+      await apiRequest("/api/admin/ads", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Authorization": `Bearer ${token}` },
       });
     },
     onSuccess: () => {
-      toast({ title: "Ad created successfully" });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/adsense"] });
+      toast({ title: "Ad placement created successfully" });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/ads"] });
       setIsCreating(false);
       form.reset();
     },
@@ -59,38 +53,37 @@ export default function AdminAdsPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest(`/api/admin/adsense/${id}`, {
+      await apiRequest(`/api/admin/ads/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` },
       });
     },
     onSuccess: () => {
-      toast({ title: "Ad deleted successfully" });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/adsense"] });
+      toast({ title: "Ad placement deleted successfully" });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/ads"] });
     },
   });
 
   const toggleMutation = useMutation({
     mutationFn: async ({ id, isActive }: { id: number; isActive: boolean }) => {
-      await apiRequest(`/api/admin/adsense/${id}`, {
+      await apiRequest(`/api/admin/ads/${id}`, {
         method: "PUT",
         body: JSON.stringify({ isActive }),
         headers: { "Authorization": `Bearer ${token}` },
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/adsense"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/ads"] });
     },
   });
 
   const form = useForm({
     defaultValues: {
       name: "",
-      location: "",
+      placement: "",
       adCode: "",
-      description: "",
-      isActive: true,
-    },
+      isActive: true
+    }
   });
 
   const onSubmit = (data: any) => {
@@ -99,108 +92,63 @@ export default function AdminAdsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-tiktok-pink mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading ads...</p>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading ads...</p>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
-  const adLocations = [
-    { key: "header", label: "Header", description: "Top of the page" },
-    { key: "sidebar", label: "Sidebar", description: "Right side of content" },
-    { key: "footer", label: "Footer", description: "Bottom of the page" },
-    { key: "content", label: "In Content", description: "Within article content" },
-    { key: "popup", label: "Popup", description: "Modal/overlay ads" },
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                onClick={() => setLocation("/admin/dashboard")}
-                className="flex items-center"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
-              <h1 className="text-xl font-semibold text-gray-900">Ad Manager</h1>
-            </div>
-            <Button 
-              onClick={() => setIsCreating(!isCreating)}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              {isCreating ? "Cancel" : "New Ad"}
-            </Button>
-          </div>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900">Ad Management</h1>
+          <Button 
+            onClick={() => setIsCreating(!isCreating)}
+            className="bg-orange-500 hover:bg-orange-600"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            {isCreating ? "Cancel" : "New Ad Placement"}
+          </Button>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Create Ad Form */}
         {isCreating && (
-          <Card className="mb-8">
+          <Card>
             <CardHeader>
-              <CardTitle>Create New Ad</CardTitle>
-              <CardDescription>Add a new AdSense advertisement to your website</CardDescription>
+              <CardTitle>Create New Ad Placement</CardTitle>
+              <CardDescription>Add a new advertisement placement to your site</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Ad Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., Header Banner" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="location"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Location</FormLabel>
-                          <FormControl>
-                            <select {...field} className="w-full p-2 border rounded-md">
-                              <option value="">Select location...</option>
-                              {adLocations.map(loc => (
-                                <option key={loc.key} value={loc.key}>
-                                  {loc.label} - {loc.description}
-                                </option>
-                              ))}
-                            </select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ad Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Header Banner" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <FormField
                     control={form.control}
-                    name="description"
+                    name="placement"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Description</FormLabel>
+                        <FormLabel>Placement Location</FormLabel>
                         <FormControl>
-                          <Input placeholder="Brief description of the ad" {...field} />
+                          <Input placeholder="header, footer, sidebar" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -212,12 +160,12 @@ export default function AdminAdsPage() {
                     name="adCode"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>AdSense Code</FormLabel>
+                        <FormLabel>Ad Code</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Paste your Google AdSense ad code here..." 
+                            placeholder="<script>... ad code here ...</script>"
+                            className="min-h-[120px]"
                             {...field} 
-                            rows={6}
                           />
                         </FormControl>
                         <FormMessage />
@@ -228,9 +176,9 @@ export default function AdminAdsPage() {
                   <Button 
                     type="submit" 
                     disabled={createMutation.isPending}
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                    className="bg-orange-500 hover:bg-orange-600"
                   >
-                    {createMutation.isPending ? "Creating..." : "Create Ad"}
+                    {createMutation.isPending ? "Creating..." : "Create Ad Placement"}
                   </Button>
                 </form>
               </Form>
@@ -240,7 +188,7 @@ export default function AdminAdsPage() {
 
         {/* Ads Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ads?.map((ad: any) => (
+          {(ads || []).map((ad: any) => (
             <Card key={ad.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex justify-between items-start">
@@ -249,17 +197,11 @@ export default function AdminAdsPage() {
                       {ad.isActive ? 'Active' : 'Inactive'}
                     </Badge>
                     <Badge variant="outline">
-                      <MapPin className="w-3 h-3 mr-1" />
-                      {ad.location}
+                      {ad.placement}
                     </Badge>
                   </div>
                   <div className="flex space-x-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => toggleMutation.mutate({ id: ad.id, isActive: !ad.isActive })}
-                      disabled={toggleMutation.isPending}
-                    >
+                    <Button size="sm" variant="outline">
                       <Eye className="w-3 h-3" />
                     </Button>
                     <Button 
@@ -273,29 +215,19 @@ export default function AdminAdsPage() {
                   </div>
                 </div>
                 <CardTitle className="text-lg">{ad.name}</CardTitle>
-                <CardDescription>{ad.description}</CardDescription>
+                <CardDescription>Placement: {ad.placement}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div className="p-3 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600">Location</p>
-                    <p className="text-sm">
-                      {adLocations.find(loc => loc.key === ad.location)?.label} - 
-                      {adLocations.find(loc => loc.key === ad.location)?.description}
-                    </p>
-                  </div>
-                  
-                  <div className="p-3 bg-gray-50 rounded-lg">
                     <p className="text-sm font-medium text-gray-600">Ad Code Preview</p>
-                    <p className="text-xs text-gray-500 font-mono truncate">
+                    <p className="text-xs font-mono text-gray-500 truncate">
                       {ad.adCode.substring(0, 50)}...
                     </p>
                   </div>
-
+                  
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
-                      Status: {ad.isActive ? "Active" : "Inactive"}
-                    </span>
+                    <span className="text-sm font-medium">Status</span>
                     <Switch
                       checked={ad.isActive}
                       onCheckedChange={(checked) => 
@@ -309,42 +241,14 @@ export default function AdminAdsPage() {
           ))}
         </div>
 
-        {(!ads || ads.length === 0) && !isCreating && (
+        {(!ads || ads.length === 0) && (
           <div className="text-center py-12">
-            <TrendingUp className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <div className="text-gray-400 text-lg mb-2">No ads created yet</div>
-            <p className="text-gray-500 mb-4">Start monetizing your website with AdSense ads</p>
-            <Button 
-              onClick={() => setIsCreating(true)}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Your First Ad
-            </Button>
+            <TrendingUp className="mx-auto h-12 w-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">No ad placements</h3>
+            <p className="mt-1 text-sm text-gray-500">Get started by creating a new ad placement.</p>
           </div>
         )}
-
-        {/* Location Guide */}
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>Ad Location Guide</CardTitle>
-            <CardDescription>Best practices for ad placement</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {adLocations.map((location) => (
-                <div key={location.key} className="p-4 border rounded-lg">
-                  <h4 className="font-medium">{location.label}</h4>
-                  <p className="text-sm text-gray-600 mt-1">{location.description}</p>
-                  <Badge variant="outline" className="mt-2">
-                    {location.key}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
-    </div>
+    </AdminLayout>
   );
 }
