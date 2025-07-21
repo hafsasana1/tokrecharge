@@ -24,6 +24,10 @@ import AdminSettingsPage from "@/pages/AdminSettingsPage";
 import AdminAnalyticsPage from "@/pages/AdminAnalyticsPage";
 import AdminAdsPage from "@/pages/AdminAdsPage";
 import AdminToolsPage from "@/pages/AdminToolsPage";
+import AboutPage from "@/pages/AboutPage";
+import ContactPage from "@/pages/ContactPage";
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
+import TermsOfServicePage from "@/pages/TermsOfServicePage";
 
 function Router() {
   return (
@@ -38,6 +42,10 @@ function Router() {
       <Route path="/coins-in-:country" component={CountryPricingPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/contact" component={ContactPage} />
+      <Route path="/privacy" component={PrivacyPolicyPage} />
+      <Route path="/terms" component={TermsOfServicePage} />
       <Route path="/admin/login" component={AdminLoginPage} />
       <Route path="/admin/dashboard" component={AdminDashboardPage} />
       <Route path="/admin/blog/new" component={AdminBlogNewPage} />
