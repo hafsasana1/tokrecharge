@@ -26,9 +26,9 @@ export default function AdminAdsPage() {
   const token = localStorage.getItem("admin_token");
 
   const { data: ads, isLoading } = useQuery({
-    queryKey: ["/api/admin/ads"],
+    queryKey: ["/api/admin/adsense"],
     queryFn: async () => {
-      const response = await fetch("/api/admin/ads", {
+      const response = await fetch("/api/admin/adsense", {
         headers: { "Authorization": `Bearer ${token}` },
       });
       return response.json();
@@ -37,7 +37,7 @@ export default function AdminAdsPage() {
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
-      await apiRequest("/api/admin/ads", {
+      await apiRequest("/api/admin/adsense", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Authorization": `Bearer ${token}` },
@@ -45,7 +45,7 @@ export default function AdminAdsPage() {
     },
     onSuccess: () => {
       toast({ title: "Ad placement created successfully" });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/ads"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/adsense"] });
       setIsCreating(false);
       form.reset();
     },
@@ -53,34 +53,34 @@ export default function AdminAdsPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest(`/api/admin/ads/${id}`, {
+      await apiRequest(`/api/admin/adsense/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` },
       });
     },
     onSuccess: () => {
       toast({ title: "Ad placement deleted successfully" });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/ads"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/adsense"] });
     },
   });
 
   const toggleMutation = useMutation({
     mutationFn: async ({ id, isActive }: { id: number; isActive: boolean }) => {
-      await apiRequest(`/api/admin/ads/${id}`, {
+      await apiRequest(`/api/admin/adsense/${id}`, {
         method: "PUT",
         body: JSON.stringify({ isActive }),
         headers: { "Authorization": `Bearer ${token}` },
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/ads"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/adsense"] });
     },
   });
 
   const form = useForm({
     defaultValues: {
       name: "",
-      placement: "",
+      location: "",
       adCode: "",
       isActive: true
     }
@@ -143,7 +143,7 @@ export default function AdminAdsPage() {
 
                   <FormField
                     control={form.control}
-                    name="placement"
+                    name="location"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Placement Location</FormLabel>
@@ -197,7 +197,7 @@ export default function AdminAdsPage() {
                       {ad.isActive ? 'Active' : 'Inactive'}
                     </Badge>
                     <Badge variant="outline">
-                      {ad.placement}
+                      {ad.location}
                     </Badge>
                   </div>
                   <div className="flex space-x-2">
@@ -215,7 +215,7 @@ export default function AdminAdsPage() {
                   </div>
                 </div>
                 <CardTitle className="text-lg">{ad.name}</CardTitle>
-                <CardDescription>Placement: {ad.placement}</CardDescription>
+                <CardDescription>Location: {ad.location}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">

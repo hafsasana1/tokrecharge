@@ -17,6 +17,8 @@ import BlogPostPage from "@/pages/BlogPostPage";
 import AdminLoginPage from "@/pages/AdminLoginPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage";
 import AdminBlogPage from "@/pages/AdminBlogPage";
+import AdminBlogNewPage from "@/pages/AdminBlogNewPage";
+import AdminBlogEditPage from "@/pages/AdminBlogEditPage";
 import AdminSettingsPage from "@/pages/AdminSettingsPage";
 import AdminAnalyticsPage from "@/pages/AdminAnalyticsPage";
 import AdminAdsPage from "@/pages/AdminAdsPage";
@@ -37,6 +39,8 @@ function Router() {
       <Route path="/blog/:slug" component={BlogPostPage} />
       <Route path="/admin/login" component={AdminLoginPage} />
       <Route path="/admin/dashboard" component={AdminDashboardPage} />
+      <Route path="/admin/blog/new" component={AdminBlogNewPage} />
+      <Route path="/admin/blog/edit/:id" component={AdminBlogEditPage} />
       <Route path="/admin/blog" component={AdminBlogPage} />
       <Route path="/admin/settings" component={AdminSettingsPage} />
       <Route path="/admin/analytics" component={AdminAnalyticsPage} />

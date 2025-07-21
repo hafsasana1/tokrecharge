@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import AdminLayout from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function AdminBlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [, setLocation] = useLocation();
   const token = localStorage.getItem("admin_token");
 
   const { data: blogPosts, isLoading } = useQuery({
@@ -64,7 +66,10 @@ export default function AdminBlogPage() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">Blog Management</h1>
-          <Button className="bg-orange-500 hover:bg-orange-600">
+          <Button 
+            onClick={() => setLocation("/admin/blog/new")}
+            className="bg-orange-500 hover:bg-orange-600"
+          >
             <Plus className="w-4 h-4 mr-2" />
             New Post
           </Button>
@@ -93,10 +98,18 @@ export default function AdminBlogPage() {
                     {post.status}
                   </Badge>
                   <div className="flex space-x-2">
-                    <Button size="sm" variant="outline">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
+                    >
                       <Eye className="w-3 h-3" />
                     </Button>
-                    <Button size="sm" variant="outline">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => setLocation(`/admin/blog/edit/${post.id}`)}
+                    >
                       <Edit className="w-3 h-3" />
                     </Button>
                     <Button 
