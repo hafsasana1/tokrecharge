@@ -280,6 +280,8 @@ export class MemStorage implements IStorage {
       { key: "googleSearchConsole", value: "", type: "text", description: "Google Search Console verification" },
       { key: "facebookPixel", value: "", type: "text", description: "Facebook Pixel code" },
       { key: "verificationMeta", value: "", type: "text", description: "Verification meta tags" },
+      { key: "canonicalUrl", value: "", type: "text", description: "Base canonical URL for the website" },
+      { key: "robots", value: "User-agent: *\nDisallow: /admin\nAllow: /", type: "text", description: "Robots.txt content" },
     ];
 
     siteSettingsData.forEach(setting => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import AdminLayout from "@/components/layout/AdminLayout";
 import { useForm } from "react-hook-form";
@@ -14,13 +14,20 @@ import {
   Globe,
   Search,
   BarChart3,
-  Image
+  Image,
+  Loader2
 } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+
+interface SettingValues {
+  [key: string]: string;
+}
 
 export default function AdminSettingsPage() {
   const { toast } = useToast();
   const token = localStorage.getItem("admin_token");
+  const [hasChanges, setHasChanges] = useState(false);
+  const [formValues, setFormValues] = useState<SettingValues>({});
 
   const { data: settings, isLoading } = useQuery({
     queryKey: ["/api/admin/settings"],
@@ -32,64 +39,110 @@ export default function AdminSettingsPage() {
     },
   });
 
-  const updateMutation = useMutation({
-    mutationFn: async ({ key, value }: { key: string; value: string }) => {
-      await apiRequest(`/api/admin/settings/${key}`, {
-        method: "PUT",
-        body: JSON.stringify({ value }),
-        headers: { "Authorization": `Bearer ${token}` },
+  // Initialize form values when settings are loaded
+  useEffect(() => {
+    if (settings && Array.isArray(settings)) {
+      const initialValues: SettingValues = {};
+      settings.forEach((setting: any) => {
+        initialValues[setting.key] = setting.value || "";
       });
+      setFormValues(initialValues);
+    }
+  }, [settings]);
+
+  const updateMutation = useMutation({
+    mutationFn: async (updates: { key: string; value: string }[]) => {
+      // Update all changed settings in parallel
+      await Promise.all(
+        updates.map(({ key, value }) =>
+          apiRequest(`/api/admin/settings/${key}`, {
+            method: "PUT",
+            body: JSON.stringify({ value }),
+            headers: { "Authorization": `Bearer ${token}` },
+          })
+        )
+      );
     },
     onSuccess: () => {
-      toast({ title: "Settings updated successfully" });
+      toast({ 
+        title: "Settings saved successfully",
+        description: "All changes have been applied to your website."
+      });
+      setHasChanges(false);
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
     },
+    onError: (error: any) => {
+      toast({
+        title: "Error saving settings",
+        description: error.message || "Failed to save settings. Please try again.",
+        variant: "destructive"
+      });
+    }
   });
-
-  const form = useForm();
 
   const settingsConfig = [
     {
       section: "General",
       icon: Globe,
       settings: [
-        { key: "title", label: "Website Title", type: "text", description: "Main website title" },
-        { key: "metaTitle", label: "Meta Title", type: "text", description: "SEO meta title" },
-        { key: "metaDescription", label: "Meta Description", type: "textarea", description: "SEO meta description" },
+        { key: "title", label: "Website Title", type: "text", description: "Main website title displayed in browser tab" },
+        { key: "metaTitle", label: "Meta Title", type: "text", description: "SEO meta title for search engines" },
+        { key: "metaDescription", label: "Meta Description", type: "textarea", description: "SEO meta description for search results" },
       ]
     },
     {
       section: "Branding",
       icon: Image,
       settings: [
-        { key: "logo", label: "Logo URL", type: "text", description: "Website logo path" },
-        { key: "favicon", label: "Favicon URL", type: "text", description: "Website favicon path" },
+        { key: "logo", label: "Logo URL", type: "text", description: "Website logo path (e.g., /assets/logo.svg)" },
+        { key: "favicon", label: "Favicon URL", type: "text", description: "Website favicon path (e.g., /assets/favicon.ico)" },
       ]
     },
     {
-      section: "Analytics",
+      section: "Analytics & Tracking",
       icon: BarChart3,
       settings: [
-        { key: "googleAnalytics", label: "Google Analytics ID", type: "text", description: "GA tracking ID (e.g., G-XXXXXXXXXX)" },
-        { key: "googleTagManager", label: "Google Tag Manager ID", type: "text", description: "GTM container ID (e.g., GTM-XXXXXXX)" },
-        { key: "googleSearchConsole", label: "Google Search Console Verification", type: "text", description: "Meta verification code for GSC" },
-        { key: "googleAdsense", label: "Google AdSense Code", type: "textarea", description: "AdSense verification or auto ads code" },
-        { key: "facebookPixel", label: "Facebook Pixel ID", type: "text", description: "Facebook Pixel tracking ID" },
+        { key: "googleAnalytics", label: "Google Analytics ID", type: "text", description: "GA4 Measurement ID (e.g., G-XXXXXXXXXX)" },
+        { key: "googleTagManager", label: "Google Tag Manager ID", type: "text", description: "GTM Container ID (e.g., GTM-XXXXXXX)" },
+        { key: "googleSearchConsole", label: "Google Search Console HTML Tag", type: "text", description: 'HTML verification tag (e.g., <meta name="google-site-verification" content="...">)' },
+        { key: "googleAdsense", label: "Google AdSense Code", type: "textarea", description: "AdSense verification meta tag or auto ads code" },
+        { key: "facebookPixel", label: "Facebook Pixel ID", type: "text", description: "Facebook Pixel tracking ID (numbers only)" },
         { key: "verificationMeta", label: "Custom Verification Meta Tags", type: "textarea", description: "Additional verification meta tags (one per line)" },
       ]
     },
     {
-      section: "SEO",
+      section: "SEO Configuration",
       icon: Search,
       settings: [
-        { key: "canonicalUrl", label: "Canonical URL", type: "text", description: "Base canonical URL" },
-        { key: "robots", label: "Robots.txt", type: "textarea", description: "Robots.txt content" },
+        { key: "canonicalUrl", label: "Canonical URL", type: "text", description: "Base canonical URL (e.g., https://example.com)" },
+        { key: "robots", label: "Robots.txt Content", type: "textarea", description: "Robots.txt file content for search crawlers" },
       ]
     }
   ];
 
-  const handleSave = (key: string, value: string) => {
-    updateMutation.mutate({ key, value });
+  const handleInputChange = (key: string, value: string) => {
+    setFormValues(prev => ({ ...prev, [key]: value }));
+    setHasChanges(true);
+  };
+
+  const handleSaveChanges = () => {
+    if (!settings || !hasChanges) return;
+
+    const updates: { key: string; value: string }[] = [];
+    
+    // Find all changed values
+    settings.forEach((setting: any) => {
+      const currentValue = formValues[setting.key] || "";
+      const originalValue = setting.value || "";
+      
+      if (currentValue !== originalValue) {
+        updates.push({ key: setting.key, value: currentValue });
+      }
+    });
+
+    if (updates.length > 0) {
+      updateMutation.mutate(updates);
+    }
   };
 
   if (isLoading) {
@@ -108,7 +161,28 @@ export default function AdminSettingsPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900">Site Settings</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Site Settings</h1>
+          {hasChanges && (
+            <Button 
+              onClick={handleSaveChanges}
+              disabled={updateMutation.isPending}
+              className="bg-orange-500 hover:bg-orange-600"
+            >
+              {updateMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          )}
+        </div>
         
         <div className="grid gap-6">
           {settingsConfig.map((section) => {
@@ -121,27 +195,28 @@ export default function AdminSettingsPage() {
                     <CardTitle>{section.section}</CardTitle>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
                   {section.settings.map((setting) => (
-                    <div key={setting.key} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+                    <div key={setting.key} className="space-y-2">
                       <div>
-                        <label className="text-sm font-medium">{setting.label}</label>
-                        <p className="text-xs text-gray-500">{setting.description}</p>
+                        <label className="text-sm font-medium text-gray-900">{setting.label}</label>
+                        <p className="text-xs text-gray-500 mt-1">{setting.description}</p>
                       </div>
-                      <div className="md:col-span-2 flex gap-2">
+                      <div className="w-full">
                         {setting.type === 'textarea' ? (
                           <Textarea
-                            defaultValue={settings?.[setting.key] || ""}
-                            onChange={(e) => handleSave(setting.key, e.target.value)}
+                            value={formValues[setting.key] || ""}
+                            onChange={(e) => handleInputChange(setting.key, e.target.value)}
                             placeholder={`Enter ${setting.label.toLowerCase()}`}
-                            className="flex-1"
+                            className="min-h-[100px] resize-vertical"
+                            rows={4}
                           />
                         ) : (
                           <Input
-                            defaultValue={settings?.[setting.key] || ""}
-                            onChange={(e) => handleSave(setting.key, e.target.value)}
+                            value={formValues[setting.key] || ""}
+                            onChange={(e) => handleInputChange(setting.key, e.target.value)}
                             placeholder={`Enter ${setting.label.toLowerCase()}`}
-                            className="flex-1"
+                            className="w-full"
                           />
                         )}
                       </div>
@@ -152,6 +227,37 @@ export default function AdminSettingsPage() {
             );
           })}
         </div>
+
+        {hasChanges && (
+          <Card className="border-orange-200 bg-orange-50">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-sm text-orange-800">You have unsaved changes</span>
+                </div>
+                <Button 
+                  onClick={handleSaveChanges}
+                  disabled={updateMutation.isPending}
+                  size="sm"
+                  className="bg-orange-500 hover:bg-orange-600"
+                >
+                  {updateMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Changes
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </AdminLayout>
   );

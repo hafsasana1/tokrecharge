@@ -146,7 +146,18 @@ export default function DynamicMeta() {
       
       {/* Verification Meta Tags */}
       {settings.googleSearchConsole && (
-        <meta name="google-site-verification" content={settings.googleSearchConsole} />
+        <>
+          {settings.googleSearchConsole.includes('<meta') ? (
+            // Handle full HTML tag
+            (() => {
+              const content = settings.googleSearchConsole.match(/content="([^"]+)"/)?.[1];
+              return content ? <meta name="google-site-verification" content={content} /> : null;
+            })()
+          ) : (
+            // Handle just the verification code
+            <meta name="google-site-verification" content={settings.googleSearchConsole} />
+          )}
+        </>
       )}
       
       {/* AdSense Script in Head - Extract client ID properly */}
