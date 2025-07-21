@@ -187,7 +187,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AdSense ads by location
+  // AdSense ads by location (legacy endpoint)
   app.get("/api/ads/:location", async (req: Request, res: Response) => {
     try {
       const { location } = req.params;
@@ -195,6 +195,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(ads);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch ads" });
+    }
+  });
+
+  // Public endpoint for active ads (no authentication required)
+  app.get("/api/adsense/active", async (req: Request, res: Response) => {
+    try {
+      const ads = await storage.getAdsenseAds();
+      // Only return active ads for public consumption
+      const activeAds = ads.filter(ad => ad.isActive);
+      res.json(activeAds);
+    } catch (error) {
+      console.error("Failed to fetch active ads:", error);
+      res.json([]); // Return empty array instead of error to prevent frontend crashes
     }
   });
 

@@ -13,6 +13,7 @@ import BlogCard from '@/components/common/BlogCard';
 import FAQSection from '@/components/common/FAQSection';
 import LiveCalculatorDemo from '@/components/hero/LiveCalculatorDemo';
 import CountryPricingSection from '@/components/sections/CountryPricingSection';
+import { HeaderAd, FooterAd } from '@/components/ads/AdSenseAd';
 import { FAQ_DATA } from '@/lib/constants';
 import type { Tool, Country, BlogPost } from '@shared/schema';
 
@@ -55,6 +56,8 @@ export default function HomePage() {
       />
       
       <Header />
+      
+      <HeaderAd pageType="homepage" />
       
       <Breadcrumb items={[{ label: 'TikTok Tools' }]} />
 
@@ -156,6 +159,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <FooterAd pageType="homepage" />
+      
       <Footer />
     </>
   );

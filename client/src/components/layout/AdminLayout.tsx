@@ -29,7 +29,7 @@ const navigation = [
   {
     title: "GENERAL",
     items: [
-      { name: "Dashboard", href: "/admin", icon: Home },
+      { name: "Dashboard", href: "/admin/dashboard", icon: Home },
       { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
       { name: "Tools", href: "/admin/tools", icon: Zap },
       { name: "Blog", href: "/admin/blog", icon: FileText },

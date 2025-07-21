@@ -47,6 +47,8 @@ function Router() {
       <Route path="/admin/analytics" component={AdminAnalyticsPage} />
       <Route path="/admin/ads" component={AdminAdsPage} />
       <Route path="/admin/tools" component={AdminToolsPage} />
+      <Route path="/admin/countries" component={AdminDashboardPage} />
+      <Route path="/admin" component={AdminDashboardPage} />
       <Route path="/admin/*" component={AdminDashboardPage} />
       <Route component={NotFound} />
     </Switch>
