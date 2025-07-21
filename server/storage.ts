@@ -242,8 +242,8 @@ export class MemStorage implements IStorage {
       { key: "favicon", value: "/assets/favicon.ico", type: "image", description: "Website favicon" },
       { key: "googleAnalytics", value: "", type: "text", description: "Google Analytics tracking code" },
       { key: "googleTagManager", value: "", type: "text", description: "Google Tag Manager container ID" },
-      { key: "googleSearchConsole", value: "", type: "text", description: "Google Search Console verification" },
       { key: "googleAdsense", value: "", type: "text", description: "Google AdSense verification or auto ads code" },
+      { key: "googleSearchConsole", value: "", type: "text", description: "Google Search Console verification" },
       { key: "facebookPixel", value: "", type: "text", description: "Facebook Pixel code" },
       { key: "verificationMeta", value: "", type: "text", description: "Verification meta tags" },
     ];

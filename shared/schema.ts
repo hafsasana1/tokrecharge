@@ -209,7 +209,9 @@ export const siteSettingsResponseSchema = z.object({
   logo: z.string().optional(),
   favicon: z.string().optional(),
   googleAnalytics: z.string().optional(),
+  googleTagManager: z.string().optional(),
   googleSearchConsole: z.string().optional(),
+  googleAdsense: z.string().optional(),
   facebookPixel: z.string().optional(),
   verificationMeta: z.string().optional(),
 });

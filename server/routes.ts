@@ -52,7 +52,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         logo: settingsObj.logo,
         favicon: settingsObj.favicon,
         googleAnalytics: settingsObj.googleAnalytics,
+        googleTagManager: settingsObj.googleTagManager,
         googleSearchConsole: settingsObj.googleSearchConsole,
+        googleAdsense: settingsObj.googleAdsense,
         facebookPixel: settingsObj.facebookPixel,
         verificationMeta: settingsObj.verificationMeta,
       });
