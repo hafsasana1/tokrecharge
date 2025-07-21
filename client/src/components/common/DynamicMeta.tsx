@@ -22,14 +22,20 @@ export default function DynamicMeta() {
   });
 
   useEffect(() => {
-    if (settings?.googleAnalytics) {
+    // Clear existing analytics scripts to prevent duplicates
+    const existingScripts = document.querySelectorAll('script[data-analytics="true"]');
+    existingScripts.forEach(script => script.remove());
+
+    if (settings?.googleAnalytics && settings.googleAnalytics.trim()) {
       // Add Google Analytics 4
       const script1 = document.createElement('script');
       script1.async = true;
       script1.src = `https://www.googletagmanager.com/gtag/js?id=${settings.googleAnalytics}`;
+      script1.setAttribute('data-analytics', 'true');
       document.head.appendChild(script1);
 
       const script2 = document.createElement('script');
+      script2.setAttribute('data-analytics', 'true');
       script2.innerHTML = `
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -39,9 +45,10 @@ export default function DynamicMeta() {
       document.head.appendChild(script2);
     }
 
-    if (settings?.googleTagManager) {
+    if (settings?.googleTagManager && settings.googleTagManager.trim()) {
       // Add Google Tag Manager
       const script = document.createElement('script');
+      script.setAttribute('data-analytics', 'true');
       script.innerHTML = `
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -52,15 +59,20 @@ export default function DynamicMeta() {
       document.head.appendChild(script);
 
       // Add noscript fallback for GTM
+      const existingNoscript = document.querySelector('noscript[data-gtm="true"]');
+      if (existingNoscript) existingNoscript.remove();
+      
       const noscript = document.createElement('noscript');
+      noscript.setAttribute('data-gtm', 'true');
       noscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${settings.googleTagManager}"
         height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
       document.body.appendChild(noscript);
     }
 
-    if (settings?.facebookPixel) {
+    if (settings?.facebookPixel && settings.facebookPixel.trim()) {
       // Add Facebook Pixel
       const script = document.createElement('script');
+      script.setAttribute('data-analytics', 'true');
       script.innerHTML = `
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -76,19 +88,44 @@ export default function DynamicMeta() {
       document.head.appendChild(script);
 
       // Add noscript fallback for Facebook Pixel
+      const existingPixelNoscript = document.querySelector('noscript[data-fb-pixel="true"]');
+      if (existingPixelNoscript) existingPixelNoscript.remove();
+      
       const noscript = document.createElement('noscript');
+      noscript.setAttribute('data-fb-pixel', 'true');
       noscript.innerHTML = `<img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=${settings.facebookPixel}&ev=PageView&noscript=1"/>`;
       document.body.appendChild(noscript);
     }
 
-    if (settings?.googleAdsense) {
-      // Add Google AdSense auto ads
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.googleAdsense}`;
-      script.crossOrigin = 'anonymous';
-      document.head.appendChild(script);
+    if (settings?.googleAdsense && settings.googleAdsense.trim()) {
+      // Remove existing AdSense scripts
+      const existingAdsense = document.querySelectorAll('script[data-adsense="true"]');
+      existingAdsense.forEach(script => script.remove());
+      
+      // Handle both full script tags and client IDs
+      if (settings.googleAdsense.includes('<script')) {
+        // Full script tag provided - extract and inject
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = settings.googleAdsense;
+        const scriptElement = tempDiv.querySelector('script');
+        if (scriptElement) {
+          const newScript = document.createElement('script');
+          newScript.async = scriptElement.async;
+          newScript.src = scriptElement.src;
+          newScript.crossOrigin = scriptElement.crossOrigin || 'anonymous';
+          newScript.setAttribute('data-adsense', 'true');
+          document.head.appendChild(newScript);
+        }
+      } else if (settings.googleAdsense.startsWith('ca-')) {
+        // Client ID provided - create script
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.googleAdsense}`;
+        script.crossOrigin = 'anonymous';
+        script.setAttribute('data-adsense', 'true');
+        document.head.appendChild(script);
+      }
     }
   }, [settings]);
 
@@ -111,10 +148,11 @@ export default function DynamicMeta() {
       {/* Custom Verification Meta Tags */}
       {settings.verificationMeta && 
         settings.verificationMeta.split('\n').map((tag, index) => {
-          if (tag.trim().startsWith('<meta')) {
-            const content = tag.match(/content="([^"]+)"/)?.[1];
-            const name = tag.match(/name="([^"]+)"/)?.[1];
-            const property = tag.match(/property="([^"]+)"/)?.[1];
+          const trimmedTag = tag.trim();
+          if (trimmedTag.startsWith('<meta')) {
+            const content = trimmedTag.match(/content="([^"]+)"/)?.[1];
+            const name = trimmedTag.match(/name="([^"]+)"/)?.[1];
+            const property = trimmedTag.match(/property="([^"]+)"/)?.[1];
             
             if (content && (name || property)) {
               return name ? 
@@ -123,7 +161,7 @@ export default function DynamicMeta() {
             }
           }
           return null;
-        })
+        }).filter(Boolean)
       }
       
       {/* Open Graph Tags with Dynamic Content */}
