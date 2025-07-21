@@ -27,7 +27,7 @@ import {
 export default function AdminDashboardPage() {
   const token = localStorage.getItem("admin_token");
 
-  const { data: dashboardData, isLoading } = useQuery({
+  const { data: dashboardData, isLoading, error } = useQuery({
     queryKey: ["/api/admin/dashboard"],
     queryFn: async () => {
       const response = await fetch("/api/admin/dashboard", {
@@ -40,7 +40,14 @@ export default function AdminDashboardPage() {
       }
       return response.json();
     },
+    enabled: !!token, // Only run query if token exists
   });
+
+  // Handle authentication error
+  if (error && !token) {
+    window.location.href = '/admin/login';
+    return null;
+  }
 
   if (isLoading) {
     return (

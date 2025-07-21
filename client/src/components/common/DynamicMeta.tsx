@@ -116,7 +116,7 @@ export default function DynamicMeta() {
         existingAdsense.forEach(script => script.remove());
         
         // Update or add new AdSense script
-        const existingStaticScript = document.querySelector('script[src*="adsbygoogle.js"]');
+        const existingStaticScript = document.querySelector('script[src*="adsbygoogle.js"]') as HTMLScriptElement;
         if (existingStaticScript) {
           // Update existing static script
           existingStaticScript.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
@@ -148,9 +148,10 @@ export default function DynamicMeta() {
       {settings.googleSearchConsole && (
         <>
           {settings.googleSearchConsole.includes('<meta') ? (
-            // Handle full HTML tag
+            // Handle full HTML tag - extract content value
             (() => {
-              const content = settings.googleSearchConsole.match(/content="([^"]+)"/)?.[1];
+              const contentMatch = settings.googleSearchConsole.match(/content=["']([^"']+)["']/);
+              const content = contentMatch ? contentMatch[1] : null;
               return content ? <meta name="google-site-verification" content={content} /> : null;
             })()
           ) : (

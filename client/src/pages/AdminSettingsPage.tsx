@@ -69,7 +69,9 @@ export default function AdminSettingsPage() {
         description: "All changes have been applied to your website."
       });
       setHasChanges(false);
+      // Invalidate both admin settings and public site-settings cache
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/site-settings"] });
     },
     onError: (error: any) => {
       toast({
