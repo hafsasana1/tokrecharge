@@ -1,19 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useLocation } from "wouter";
+import AdminLayout from "@/components/layout/AdminLayout";
 import { 
   BarChart3, 
   Users, 
   Globe, 
   FileText, 
   TrendingUp, 
-  Settings,
-  LogOut,
-  Calendar,
-  MapPin,
-  Eye
+  ArrowUpRight,
+  ArrowDownRight
 } from "lucide-react";
 import {
   BarChart,
@@ -25,26 +21,11 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
-  LineChart,
-  Line,
-  Area,
-  AreaChart
+  Cell
 } from 'recharts';
 
-const COLORS = ['#FF1744', '#9C27B0', '#3F51B5', '#2196F3', '#009688', '#4CAF50'];
-
 export default function AdminDashboardPage() {
-  const [, setLocation] = useLocation();
-  
-  // Check if user is authenticated
   const token = localStorage.getItem("admin_token");
-  const user = JSON.parse(localStorage.getItem("admin_user") || "{}");
-  
-  if (!token) {
-    setLocation("/admin/login");
-    return null;
-  }
 
   const { data: dashboardData, isLoading } = useQuery({
     queryKey: ["/api/admin/dashboard"],
@@ -61,340 +42,290 @@ export default function AdminDashboardPage() {
     },
   });
 
-  const handleLogout = () => {
-    localStorage.removeItem("admin_token");
-    localStorage.removeItem("admin_user");
-    setLocation("/admin/login");
-  };
-
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-tiktok-pink mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
+  // Mock data for performance chart
+  const performanceData = [
+    { name: 'Jan', pageViews: 40, clicks: 24 },
+    { name: 'Feb', pageViews: 30, clicks: 13 },
+    { name: 'Mar', pageViews: 20, clicks: 98 },
+    { name: 'Apr', pageViews: 27, clicks: 39 },
+    { name: 'May', pageViews: 18, clicks: 48 },
+    { name: 'Jun', pageViews: 23, clicks: 38 },
+    { name: 'Jul', pageViews: 34, clicks: 43 }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-gray-900">
-                TokRecharge Admin
-              </h1>
-              <Badge variant="secondary" className="ml-3">
-                {user.role}
-              </Badge>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700">Welcome, {user.username}</span>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleLogout}
-                className="flex items-center"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
-            </div>
+    <AdminLayout>
+      {/* Alert Message */}
+      <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
+        <div className="flex items-center">
+          <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+            ⚠️
           </div>
+          <p className="text-sm text-orange-800">
+            We regret to inform you that our server is currently experiencing technical difficulties.
+          </p>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Tools</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{dashboardData?.stats.totalTools || 0}</div>
-              <p className="text-xs text-muted-foreground">Active calculator tools</p>
-            </CardContent>
-          </Card>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Total Tools */}
+        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-orange-900">Total Tools</CardTitle>
+            <div className="w-10 h-10 bg-orange-200 rounded-lg flex items-center justify-center">
+              <BarChart3 className="h-5 w-5 text-orange-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-orange-900 mb-1">
+              {dashboardData?.stats.totalTools || 13}
+            </div>
+            <div className="flex items-center text-sm">
+              <ArrowUpRight className="w-4 h-4 text-green-500 mr-1" />
+              <span className="text-green-600 font-medium">7.1%</span>
+              <span className="text-gray-600 ml-1">Last Week</span>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Countries</CardTitle>
-              <Globe className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{dashboardData?.stats.totalCountries || 0}</div>
-              <p className="text-xs text-muted-foreground">Supported countries</p>
-            </CardContent>
-          </Card>
+        {/* New Leads */}
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-blue-900">New Leads</CardTitle>
+            <div className="w-10 h-10 bg-blue-200 rounded-lg flex items-center justify-center">
+              <Users className="h-5 w-5 text-blue-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-blue-900 mb-1">
+              9,526
+            </div>
+            <div className="flex items-center text-sm">
+              <ArrowUpRight className="w-4 h-4 text-green-500 mr-1" />
+              <span className="text-green-600 font-medium">8.1%</span>
+              <span className="text-gray-600 ml-1">Last Month</span>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Blog Posts</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{dashboardData?.stats.totalBlogPosts || 0}</div>
-              <p className="text-xs text-muted-foreground">Published articles</p>
-            </CardContent>
-          </Card>
+        {/* Deals */}
+        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-red-900">Deals</CardTitle>
+            <div className="w-10 h-10 bg-red-200 rounded-lg flex items-center justify-center">
+              <FileText className="h-5 w-5 text-red-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-red-900 mb-1">976</div>
+            <div className="flex items-center text-sm">
+              <ArrowDownRight className="w-4 h-4 text-red-500 mr-1" />
+              <span className="text-red-600 font-medium">4.3%</span>
+              <span className="text-gray-600 ml-1">Last Month</span>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Visitors</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{dashboardData?.stats.totalVisitors || 0}</div>
-              <p className="text-xs text-muted-foreground">Recent visitors</p>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Booked Revenue */}
+        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-green-900">Booked Revenue</CardTitle>
+            <div className="w-10 h-10 bg-green-200 rounded-lg flex items-center justify-center">
+              <TrendingUp className="h-5 w-5 text-green-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-green-900 mb-1">$123.6k</div>
+            <div className="flex items-center text-sm">
+              <ArrowDownRight className="w-4 h-4 text-red-500 mr-1" />
+              <span className="text-red-600 font-medium">10.6%</span>
+              <span className="text-gray-600 ml-1">Last Month</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-        {/* Modern Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Daily Visitors Trend Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2" />
-                Daily Visitors Trend
-              </CardTitle>
-              <CardDescription>Visitor traffic over the last 7 days</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={dashboardData?.analytics?.dailyVisitors?.map((item: any) => ({
-                  date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                  visitors: item.count
-                })) || []}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area 
-                    type="monotone" 
-                    dataKey="visitors" 
-                    stroke="#FF1744" 
-                    fill="url(#colorGradient)" 
-                  />
-                  <defs>
-                    <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#FF1744" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#FF1744" stopOpacity={0.1}/>
-                    </linearGradient>
-                  </defs>
-                </AreaChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-
-          {/* Country Distribution Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Globe className="w-5 h-5 mr-2" />
-                Visitor Countries
-              </CardTitle>
-              <CardDescription>Geographic distribution of visitors</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={dashboardData?.analytics?.topCountries?.slice(0, 6).map((item: any, index: number) => ({
-                      ...item,
-                      color: COLORS[index % COLORS.length]
-                    })) || []}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ country, count }) => `${country}: ${count}`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="count"
-                  >
-                    {(dashboardData?.analytics?.topCountries?.slice(0, 6) || []).map((entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Page Views Bar Chart */}
-        <Card className="mb-8">
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Performance Chart */}
+        <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <BarChart3 className="w-5 h-5 mr-2" />
-              Page Performance
-            </CardTitle>
-            <CardDescription>Most popular pages by view count</CardDescription>
+            <div className="flex justify-between items-center">
+              <CardTitle>Performance</CardTitle>
+              <div className="flex space-x-2 text-sm">
+                <button className="px-3 py-1 bg-gray-100 rounded-md">ALL</button>
+                <button className="px-3 py-1 text-gray-600">1M</button>
+                <button className="px-3 py-1 text-gray-600">6M</button>
+                <button className="px-3 py-1 text-gray-600">1Y</button>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={dashboardData?.analytics?.topPages?.slice(0, 8).map((item: any) => ({
-                page: item.page.replace(/^\//, '') || 'Home',
-                views: item.count
-              })) || []}>
+              <BarChart data={performanceData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="page" />
+                <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="views" fill="#9C27B0" />
+                <Bar dataKey="pageViews" fill="#FF6B35" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="clicks" fill="#06D6A0" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Charts and Analytics - List View */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Top Countries */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <MapPin className="w-5 h-5 mr-2" />
-                Top Countries
-              </CardTitle>
-              <CardDescription>Visitor traffic by country</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {dashboardData?.analytics.topCountries?.map((country: any, index: number) => (
-                  <div key={country.country} className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-gradient-to-r from-tiktok-pink to-tiktok-cyan rounded-full flex items-center justify-center text-white text-sm font-bold">
-                        {index + 1}
-                      </div>
-                      <span className="ml-3 font-medium">{country.country || 'Unknown'}</span>
-                    </div>
-                    <Badge variant="secondary">{country.count} visits</Badge>
-                  </div>
-                ))}
+            <div className="flex items-center justify-center mt-4 space-x-6">
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                <span className="text-sm text-gray-600">Page Views</span>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Top Pages */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Eye className="w-5 h-5 mr-2" />
-                Popular Pages
-              </CardTitle>
-              <CardDescription>Most visited pages</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {dashboardData?.analytics.topPages?.map((page: any, index: number) => (
-                  <div key={page.page} className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                        {index + 1}
-                      </div>
-                      <span className="ml-3 font-medium text-sm">{page.page}</span>
-                    </div>
-                    <Badge variant="secondary">{page.count} views</Badge>
-                  </div>
-                ))}
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-teal-500 rounded-full mr-2"></div>
+                <span className="text-sm text-gray-600">Clicks</span>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Recent Visitors */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Calendar className="w-5 h-5 mr-2" />
-              Recent Visitors
-            </CardTitle>
-            <CardDescription>Latest visitor activity</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-2">IP Address</th>
-                    <th className="text-left p-2">Location</th>
-                    <th className="text-left p-2">Page</th>
-                    <th className="text-left p-2">Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dashboardData?.recentVisitors?.map((visitor: any) => (
-                    <tr key={visitor.id} className="border-b hover:bg-gray-50">
-                      <td className="p-2 font-mono text-xs">{visitor.ipAddress}</td>
-                      <td className="p-2">
-                        {visitor.country && visitor.city 
-                          ? `${visitor.city}, ${visitor.country}`
-                          : visitor.country || 'Unknown'
-                        }
-                      </td>
-                      <td className="p-2 font-medium">{visitor.page}</td>
-                      <td className="p-2 text-gray-500">
-                        {new Date(visitor.visitedAt).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </CardContent>
         </Card>
 
-        {/* Quick Actions */}
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            <Button 
-              className="h-20 flex flex-col bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
-              onClick={() => setLocation("/admin/blog")}
-            >
-              <FileText className="w-6 h-6 mb-1" />
-              Manage Blog
-            </Button>
-            <Button 
-              className="h-20 flex flex-col bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
-              onClick={() => setLocation("/admin/settings")}
-            >
-              <Settings className="w-6 h-6 mb-1" />
-              Site Settings
-            </Button>
-            <Button 
-              className="h-20 flex flex-col bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
-              onClick={() => setLocation("/admin/analytics")}
-            >
-              <BarChart3 className="w-6 h-6 mb-1" />
-              Analytics
-            </Button>
-            <Button 
-              className="h-20 flex flex-col bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
-              onClick={() => setLocation("/admin/ads")}
-            >
-              <TrendingUp className="w-6 h-6 mb-1" />
-              Ad Manager
-            </Button>
-            <Button 
-              className="h-20 flex flex-col bg-gradient-to-r from-tiktok-pink to-tiktok-cyan hover:from-tiktok-pink/90 hover:to-tiktok-cyan/90"
-              onClick={() => setLocation("/admin/tools")}
-            >
-              <BarChart3 className="w-6 h-6 mb-1" />
-              Manage Tools
-            </Button>
-          </div>
-        </div>
+        {/* Conversions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Conversions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-center mb-4">
+              <div className="relative">
+                <ResponsiveContainer width={200} height={200}>
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Returning', value: 65.2 },
+                        { name: 'New', value: 34.8 }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      startAngle={90}
+                      endAngle={450}
+                      dataKey="value"
+                    >
+                      <Cell fill="#FF6B35" />
+                      <Cell fill="#E5E5E5" />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold">65.2%</div>
+                    <div className="text-sm text-gray-500">Returning Customer</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between">
+                <span className="text-sm">This Week</span>
+                <span className="font-semibold">23.5k</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Last Week</span>
+                <span className="font-semibold">41.05k</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+
+      {/* Bottom Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Sessions by Country */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Sessions by Country</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                { country: 'Canada', visitors: 2500, color: 'bg-blue-500' },
+                { country: 'United States', visitors: 1800, color: 'bg-orange-500' },
+                { country: 'Brazil', visitors: 1200, color: 'bg-gray-400' }
+              ].map((country, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className={`w-3 h-3 rounded-full mr-3 ${country.color}`}></div>
+                    <span className="text-sm">{country.country}</span>
+                  </div>
+                  <span className="font-medium">{country.visitors}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>This Week</span>
+                <span>Last Week</span>
+              </div>
+              <div className="flex justify-between font-semibold">
+                <span>23.5k</span>
+                <span>41.05k</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Top Pages */}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Top Pages</CardTitle>
+              <Button variant="link" size="sm" className="text-orange-500">
+                View all...
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-4 gap-4 text-sm font-medium text-gray-500">
+                <span>Page Path</span>
+                <span>Page Views</span>
+                <span>Exit Rate</span>
+                <span></span>
+              </div>
+              {[
+                { path: '/coin-calculator', views: 485, rate: '44%', trend: 'up' },
+                { path: '/gift-value', views: 426, rate: '28.5%', trend: 'down' },
+                { path: '/earnings', views: 254, rate: '12.2%', trend: 'up' },
+                { path: '/blog', views: 1369, rate: '5.1%', trend: 'up' },
+                { path: '/countries', views: 985, rate: '44.2%', trend: 'down' },
+              ].map((page, index) => (
+                <div key={index} className="grid grid-cols-4 gap-4 items-center py-2 text-sm">
+                  <span className="text-blue-600 hover:underline cursor-pointer">
+                    {page.path}
+                  </span>
+                  <span>{page.views}</span>
+                  <span className={page.trend === 'up' ? 'text-green-600' : 'text-red-600'}>
+                    {page.rate}
+                  </span>
+                  <span className={`text-xs ${page.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                    {page.trend === 'up' ? '+' : '-'}1.1%
+                  </span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </AdminLayout>
   );
 }
