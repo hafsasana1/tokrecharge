@@ -240,7 +240,7 @@ export default function CountryPricingSection() {
             </span>
             <Star className="w-6 h-6 text-yellow-500 animate-spin" style={{ animationDuration: '3s' }} />
           </div>
-          <Link href="/country-pricing">
+          <Link href="/countries">
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
