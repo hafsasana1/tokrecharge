@@ -43,6 +43,51 @@
   --soft-orange: hsl(25, 95%, 95%);
 }
 
+/* TikTok color utilities */
+.bg-tiktok-pink {
+  background-color: var(--tiktok-pink);
+}
+
+.bg-tiktok-cyan {
+  background-color: var(--tiktok-cyan);
+}
+
+.bg-tiktok-purple {
+  background-color: var(--tiktok-purple);
+}
+
+.text-tiktok-pink {
+  color: var(--tiktok-pink);
+}
+
+.text-tiktok-cyan {
+  color: var(--tiktok-cyan);
+}
+
+.text-tiktok-purple {
+  color: var(--tiktok-purple);
+}
+
+.from-tiktok-pink {
+  --tw-gradient-from: var(--tiktok-pink);
+  --tw-gradient-to: transparent;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-tiktok-cyan {
+  --tw-gradient-from: var(--tiktok-cyan);
+  --tw-gradient-to: transparent;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-tiktok-pink {
+  --tw-gradient-to: var(--tiktok-pink);
+}
+
+.to-tiktok-cyan {
+  --tw-gradient-to: var(--tiktok-cyan);
+}
+
 .dark {
   --background: hsl(240, 10%, 3.9%);
   --foreground: hsl(0, 0%, 98%);
