@@ -12,7 +12,7 @@ export default function Header() {
     { name: 'Tools', href: '#tools', icon: Calculator },
     { name: 'Blog', href: '/blog', icon: BookOpen },
     { name: 'Countries', href: '#countries', icon: Globe },
-    { name: 'Trends', href: '#trends', icon: TrendingUp },
+    { name: 'Trends', href: '/trends', icon: TrendingUp },
   ];
 
   return (

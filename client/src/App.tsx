@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import HomePage from "@/pages/HomePage";
+import TrendsPage from "@/pages/TrendsPage";
 import CoinCalculatorPage from "@/pages/CoinCalculatorPage";
 import GiftValuePage from "@/pages/GiftValuePage";
 import EarningsEstimatorPage from "@/pages/EarningsEstimatorPage";
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/coins-in-:country" component={CountryPricingPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
+      <Route path="/trends" component={TrendsPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/privacy" component={PrivacyPolicyPage} />
