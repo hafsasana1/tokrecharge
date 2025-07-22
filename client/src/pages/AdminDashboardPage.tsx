@@ -265,14 +265,20 @@ export default function AdminDashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {[
-                { country: 'Canada', visitors: 2500, color: 'bg-blue-500' },
-                { country: 'United States', visitors: 1800, color: 'bg-orange-500' },
-                { country: 'Brazil', visitors: 1200, color: 'bg-gray-400' }
+                { country: 'Canada', flag: '🇨🇦', code: 'CA', visitors: 2500, color: 'bg-blue-500' },
+                { country: 'United States', flag: '🇺🇸', code: 'US', visitors: 1800, color: 'bg-orange-500' },
+                { country: 'Brazil', flag: '🇧🇷', code: 'BR', visitors: 1200, color: 'bg-gray-400' }
               ].map((country, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center">
                     <div className={`w-3 h-3 rounded-full mr-3 ${country.color}`}></div>
-                    <span className="text-sm">{country.country}</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg">{country.flag}</span>
+                      <span className="bg-gray-100 px-1 py-0.5 rounded text-xs font-semibold text-gray-700">
+                        {country.code}
+                      </span>
+                      <span className="text-sm">{country.country}</span>
+                    </div>
                   </div>
                   <span className="font-medium">{country.visitors}</span>
                 </div>

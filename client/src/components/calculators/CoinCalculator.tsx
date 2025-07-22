@@ -65,7 +65,7 @@ export default function CoinCalculator() {
             </Label>
             <Select value={selectedCurrency} onValueChange={handleCurrencyChange}>
               <SelectTrigger className="h-14 border-2 border-gray-200 focus:border-purple-500 rounded-xl text-lg font-semibold">
-                <SelectValue placeholder="Select currency" />
+                <SelectValue placeholder="🌍 Select currency" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="USD">

@@ -172,19 +172,19 @@ export default function CountryPricingSection() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
-                    <div className="flex flex-col items-center space-y-1">
-                      <div className={`text-4xl transition-transform duration-300 ${
-                        hoveredCountry === country.id ? 'scale-110 animate-bounce' : ''
-                      }`}>
-                        {country.flag}
-                      </div>
+                    <div className={`text-3xl transition-transform duration-300 ${
+                      hoveredCountry === country.id ? 'scale-110 animate-bounce' : ''
+                    }`}>
+                      {country.flag}
+                    </div>
+                    <div className="flex items-center space-x-2">
                       <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs font-bold">
                         {country.code}
                       </div>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-800 text-lg">{country.name}</h3>
-                      <p className="text-sm text-gray-600">{country.currency}</p>
+                      <div>
+                        <h3 className="font-bold text-gray-800 text-base">{country.name}</h3>
+                        <p className="text-xs text-gray-600">{country.currency}</p>
+                      </div>
                     </div>
                   </div>
                   {country.savings && (
@@ -220,7 +220,10 @@ export default function CountryPricingSection() {
                     variant="ghost" 
                     className="w-full mt-4 group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:text-white transition-all duration-300"
                   >
-                    View {country.name} Prices
+                    <div className="flex items-center space-x-2">
+                      <span>{country.flag}</span>
+                      <span>View {country.name} Prices</span>
+                    </div>
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
