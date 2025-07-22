@@ -10,9 +10,9 @@ export default function Footer() {
   ];
 
   const countryLinks = [
-    { name: 'USA Pricing', href: '/country-pricing' },
-    { name: 'India Pricing', href: '/country-pricing' },
-    { name: 'Pakistan Pricing', href: '/country-pricing' },
+    { name: '🇺🇸 USA Pricing', href: '/country-pricing' },
+    { name: '🇮🇳 India Pricing', href: '/country-pricing' },
+    { name: '🇵🇰 Pakistan Pricing', href: '/country-pricing' },
   ];
 
   const companyLinks = [

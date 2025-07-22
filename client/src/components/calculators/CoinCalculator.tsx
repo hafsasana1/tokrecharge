@@ -68,12 +68,48 @@ export default function CoinCalculator() {
                 <SelectValue placeholder="Select currency" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="USD">USD - US Dollar</SelectItem>
-                <SelectItem value="INR">INR - Indian Rupee</SelectItem>
-                <SelectItem value="PKR">PKR - Pakistani Rupee</SelectItem>
-                <SelectItem value="EUR">EUR - Euro</SelectItem>
-                <SelectItem value="GBP">GBP - British Pound</SelectItem>
-                <SelectItem value="CAD">CAD - Canadian Dollar</SelectItem>
+                <SelectItem value="USD">
+                  <div className="flex items-center space-x-2">
+                    <span>🇺🇸</span>
+                    <span className="bg-gray-100 px-1 py-0.5 rounded text-xs font-semibold text-gray-700">US</span>
+                    <span>USD - US Dollar</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="INR">
+                  <div className="flex items-center space-x-2">
+                    <span>🇮🇳</span>
+                    <span className="bg-gray-100 px-1 py-0.5 rounded text-xs font-semibold text-gray-700">IN</span>
+                    <span>INR - Indian Rupee</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="PKR">
+                  <div className="flex items-center space-x-2">
+                    <span>🇵🇰</span>
+                    <span className="bg-gray-100 px-1 py-0.5 rounded text-xs font-semibold text-gray-700">PK</span>
+                    <span>PKR - Pakistani Rupee</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="EUR">
+                  <div className="flex items-center space-x-2">
+                    <span>🇪🇺</span>
+                    <span className="bg-gray-100 px-1 py-0.5 rounded text-xs font-semibold text-gray-700">EU</span>
+                    <span>EUR - Euro</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="GBP">
+                  <div className="flex items-center space-x-2">
+                    <span>🇬🇧</span>
+                    <span className="bg-gray-100 px-1 py-0.5 rounded text-xs font-semibold text-gray-700">GB</span>
+                    <span>GBP - British Pound</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="CAD">
+                  <div className="flex items-center space-x-2">
+                    <span>🇨🇦</span>
+                    <span className="bg-gray-100 px-1 py-0.5 rounded text-xs font-semibold text-gray-700">CA</span>
+                    <span>CAD - Canadian Dollar</span>
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
