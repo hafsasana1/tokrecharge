@@ -10,9 +10,30 @@ export default function Footer() {
   ];
 
   const countryLinks = [
-    { name: '🇺🇸 USA Pricing', href: '/country-pricing?country=us' },
-    { name: '🇮🇳 India Pricing', href: '/country-pricing?country=in' },
-    { name: '🇵🇰 Pakistan Pricing', href: '/country-pricing?country=pk' },
+    { 
+      id: 'usa',
+      name: '🇺🇸 USA Pricing',
+      href: '/country-pricing?country=us',
+      flag: '🇺🇸',
+      code: 'US',
+      label: 'USA Pricing'
+    },
+    { 
+      id: 'india',
+      name: '🇮🇳 India Pricing',
+      href: '/country-pricing?country=in',
+      flag: '🇮🇳',
+      code: 'IN',
+      label: 'India Pricing'
+    },
+    { 
+      id: 'pakistan',
+      name: '🇵🇰 Pakistan Pricing',
+      href: '/country-pricing?country=pk',
+      flag: '🇵🇰',
+      code: 'PK',
+      label: 'Pakistan Pricing'
+    },
   ];
 
   const companyLinks = [
@@ -55,9 +76,11 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Countries</h4>
             <ul className="space-y-2">
               {countryLinks.map((link) => (
-                <li key={link.name}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition-colors">
-                    {link.name}
+                <li key={link.id}>
+                  <Link href={link.href} className="text-gray-400 hover:text-white transition-colors flex items-center space-x-2">
+                    <span className="text-lg">{link.flag}</span>
+                    <div className="bg-gray-600 text-white px-1 py-0.5 rounded text-xs font-bold">{link.code}</div>
+                    <span>{link.label}</span>
                   </Link>
                 </li>
               ))}

@@ -49,12 +49,12 @@ export default function RechargeComparison() {
               <SelectContent>
                 {countries.map((country) => (
                   <SelectItem key={country.id} value={country.id.toString()}>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-lg">{country.flag}</span>
-                      <span className="bg-gray-100 px-1 py-0.5 rounded text-xs font-semibold text-gray-700">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl">{country.flag}</span>
+                      <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs font-bold">
                         {country.code}
-                      </span>
-                      <span>{country.name}</span>
+                      </div>
+                      <span className="font-semibold">{country.name}</span>
                     </div>
                   </SelectItem>
                 ))}
@@ -68,13 +68,13 @@ export default function RechargeComparison() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">{selectedCountry.flag}</span>
-                <span className="bg-gray-100 px-2 py-1 rounded text-sm font-bold text-gray-700">
+              <div className="flex items-center space-x-3">
+                <span className="text-3xl">{selectedCountry.flag}</span>
+                <div className="bg-gray-800 text-white px-3 py-1 rounded text-sm font-bold">
                   {selectedCountry.code}
-                </span>
+                </div>
               </div>
-              <span>{selectedCountry.name} - TikTok Coin Packages</span>
+              <span className="text-lg font-bold">{selectedCountry.name} - TikTok Coin Packages</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -125,17 +125,20 @@ export default function RechargeComparison() {
           <CardContent>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {countries.slice(0, 6).map((country) => (
-                <div key={country.id} className="p-4 border rounded-lg hover:shadow-lg transition-shadow">
+                <div key={country.id} className="p-4 border rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
                   <div className="text-center">
-                    <div className="flex flex-col items-center space-y-2 mb-3">
-                      <div className="text-3xl">{country.flag}</div>
-                      <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs font-bold">
+                    <div className="flex flex-col items-center space-y-3 mb-3">
+                      <div className="text-4xl hover:animate-bounce transition-transform">{country.flag}</div>
+                      <div className="bg-gray-800 text-white px-3 py-1 rounded text-sm font-bold">
                         {country.code}
                       </div>
                     </div>
-                    <div className="font-semibold">{country.name}</div>
-                    <div className="text-sm text-gray-600 mt-1">
-                      70 coins ≈ {formatCurrency(70 * parseFloat(country.coinRate), country.currency)}
+                    <div className="font-bold text-lg mb-2">{country.name}</div>
+                    <div className="text-sm text-gray-600 mt-1 bg-gray-50 p-2 rounded">
+                      <span className="font-semibold">70 coins ≈ </span>
+                      <span className="text-purple-600 font-bold">
+                        {formatCurrency(70 * parseFloat(country.coinRate), country.currency)}
+                      </span>
                     </div>
                   </div>
                 </div>

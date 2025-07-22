@@ -231,10 +231,17 @@ export default function TrendsPage() {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {countryTrends.map((country, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-all duration-300">
+              <Card key={index} className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105">
                 <CardHeader className="pb-2">
-                  <div className="text-4xl mb-2">{country.flag}</div>
-                  <CardTitle className="text-lg">{country.country}</CardTitle>
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className="text-4xl hover:animate-bounce transition-transform">{country.flag}</div>
+                    <div className="bg-gray-800 text-white px-2 py-1 rounded text-xs font-bold">
+                      {country.country === 'United States' ? 'US' : 
+                       country.country === 'India' ? 'IN' : 
+                       country.country === 'Pakistan' ? 'PK' : 'UK'}
+                    </div>
+                  </div>
+                  <CardTitle className="text-lg font-bold">{country.country}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-purple-600 mb-2">
@@ -244,7 +251,7 @@ export default function TrendsPage() {
                     <TrendingUp className="w-4 h-4 mr-1" />
                     {country.trend}
                   </div>
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs bg-gradient-to-r from-green-100 to-blue-100">
                     {country.savings}
                   </Badge>
                 </CardContent>
