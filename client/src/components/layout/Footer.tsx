@@ -10,9 +10,9 @@ export default function Footer() {
   ];
 
   const countryLinks = [
-    { name: '🇺🇸 USA Pricing', href: '/coins-in-united-states' },
-    { name: '🇮🇳 India Pricing', href: '/coins-in-india' },
-    { name: '🇵🇰 Pakistan Pricing', href: '/coins-in-pakistan' },
+    { name: '🇺🇸 USA Pricing', href: '/coins-in-us' },
+    { name: '🇮🇳 India Pricing', href: '/coins-in-in' },
+    { name: '🇵🇰 Pakistan Pricing', href: '/coins-in-pk' },
   ];
 
   const companyLinks = [
