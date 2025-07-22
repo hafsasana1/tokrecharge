@@ -146,15 +146,23 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Start Using Our TikTok Tools</h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">Join thousands of creators and fans who use our calculators daily to maximize their TikTok earnings</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Join Thousands of Creators</h2>
+          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+            Start using our free tools today and take control of your TikTok monetization journey
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
-              <a href="#coin-calculator">Calculate Coins Now</a>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600 transition-all duration-300">
-              <a href="#tools">Browse All Tools</a>
-            </Button>
+            <a 
+              href="/coin-calculator" 
+              className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 inline-block"
+            >
+              Start Calculating
+            </a>
+            <a 
+              href="/contact" 
+              className="border-2 border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 rounded-lg font-semibold transition-all duration-300 inline-block"
+            >
+              Get In Touch
+            </a>
           </div>
         </div>
       </section>
