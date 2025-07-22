@@ -41,9 +41,9 @@ export default function CoinToDiamondPage() {
   return (
     <>
       <SEOHead 
-        title="TikTok Coins to Diamonds Converter - Currency System | TokRecharge.com"
-        description="Convert TikTok coins to diamonds and understand the internal currency system. Learn how creators earn from gifts and the conversion rates."
-        keywords="tiktok coins to diamonds, tiktok currency system, tiktok diamond conversion, tiktok creator earnings"
+        title="TikTok Coins to Diamonds Converter - 2:1 Conversion Rate Calculator | TokRecharge.com"
+        description="Convert TikTok coins to diamonds with exact 2:1 ratio. Understand creator currency system, commission rates, and how diamonds work for withdrawals. Free conversion calculator."
+        keywords="coins to diamonds tiktok, tiktok diamond converter, 2 coins 1 diamond, tiktok creator currency, diamond withdrawal calculator"
         canonical="https://tokrecharge.com/coin-to-diamond"
         schemaData={schemaData}
       />

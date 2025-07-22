@@ -48,9 +48,9 @@ export default function HomePage() {
   return (
     <>
       <SEOHead 
-        title="TokRecharge.com - TikTok Coin Calculator & Recharge Tools"
-        description="Calculate TikTok coin values, compare recharge prices, estimate earnings, and convert gifts to cash. Free TikTok calculator tools for creators and fans."
-        keywords="tiktok coin calculator, tiktok recharge price, tiktok gift value, tiktok earnings calculator"
+        title="TikTok Coin Calculator & Tools - Convert Coins, Compare Prices, Estimate Earnings | TokRecharge.com"
+        description="Free TikTok tools: coin calculator, gift value estimator, earnings calculator, withdrawal calculator, and country price comparison. Calculate coin values in 20+ currencies instantly."
+        keywords="tiktok coin calculator, tiktok gift calculator, tiktok earnings calculator, coin to money converter, tiktok recharge prices"
         canonical="https://tokrecharge.com"
         schemaData={schemaData}
       />

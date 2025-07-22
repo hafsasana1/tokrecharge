@@ -38,9 +38,9 @@ export default function CoinCalculatorPage() {
   return (
     <>
       <SEOHead 
-        title="TikTok Coin Calculator - Convert Coins to Real Money | TokRecharge.com"
-        description="Calculate the exact value of your TikTok coins in multiple currencies. Convert TikTok coins to USD, INR, PKR, EUR, GBP, and more with our free calculator."
-        keywords="tiktok coin calculator, tiktok coin value, convert tiktok coins, tiktok coin worth"
+        title="TikTok Coin Calculator - Convert Coins to USD, EUR, GBP & More | TokRecharge.com"
+        description="Free TikTok coin calculator converts coins to real money instantly. Calculate exact values in USD, EUR, GBP, INR, PKR and 20+ currencies. See live coin rates and pricing across countries."
+        keywords="tiktok coin calculator, tiktok coin value, convert tiktok coins to usd, tiktok coin worth, coin to money converter"
         canonical="https://tokrecharge.com/coin-calculator"
         schemaData={schemaData}
       />

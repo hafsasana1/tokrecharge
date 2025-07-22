@@ -41,9 +41,9 @@ export default function RechargePricesPage() {
   return (
     <>
       <SEOHead 
-        title="TikTok Recharge Prices - Compare Coin Packages by Country | TokRecharge.com"
-        description="Compare TikTok coin recharge prices across different countries. Find the best value packages and see pricing differences between regions."
-        keywords="tiktok recharge prices, tiktok coin packages, buy tiktok coins, tiktok coin price comparison"
+        title="TikTok Coin Recharge Prices - Compare Packages Across 20+ Countries | TokRecharge.com"
+        description="Compare TikTok coin packages and recharge prices in USA, India, Pakistan, UK, Canada and 15+ more countries. Find cheapest coin deals, bulk discounts, and best value packages worldwide."
+        keywords="tiktok recharge prices, tiktok coin packages, buy tiktok coins cheap, coin price comparison by country, tiktok coin deals"
         canonical="https://tokrecharge.com/recharge-prices"
         schemaData={schemaData}
       />

@@ -63,9 +63,9 @@ export default function CountryPricingPage() {
   return (
     <>
       <SEOHead 
-        title={`TikTok Coin Prices in ${countryData.name} - ${countryData.currency} Rates | TokRecharge.com`}
-        description={`Find TikTok coin recharge prices in ${countryData.name}. Compare packages and get the best value for ${countryData.currency} purchases.`}
-        keywords={`tiktok coins ${countryData.name.toLowerCase()}, tiktok recharge ${countryData.currency.toLowerCase()}, buy tiktok coins ${countryData.name.toLowerCase()}`}
+        title={`TikTok Coin Prices in ${countryData.name} - Complete ${countryData.currency} Package Guide | TokRecharge.com`}
+        description={`Complete TikTok coin pricing guide for ${countryData.name}. Live ${countryData.currency} rates, bulk packages, best deals, and coin cost comparison. Updated ${new Date().getFullYear()} pricing.`}
+        keywords={`tiktok coins ${countryData.name.toLowerCase()}, ${countryData.currency.toLowerCase()} coin prices, buy tiktok coins ${countryData.name.toLowerCase()}, coin packages ${countryData.code.toLowerCase()}`}
         canonical={`https://tokrecharge.com/coins-in-${country}`}
         schemaData={schemaData}
       />

@@ -37,9 +37,9 @@ export default function GiftValuePage() {
   return (
     <>
       <SEOHead 
-        title="TikTok Gift Value Calculator - Check Gift Costs | TokRecharge.com"
-        description="Calculate the real money cost of TikTok gifts including Rose, Lion, Galaxy, and Universe. See how much creators earn from each gift."
-        keywords="tiktok gift value, tiktok gift cost, tiktok gift calculator, lion gift tiktok"
+        title="TikTok Gift Value Calculator - Rose, Lion, Galaxy & Universe Gift Costs | TokRecharge.com"
+        description="Calculate real money cost of all TikTok gifts including Rose (1 coin), Lion (500 coins), Galaxy (1000 coins), Universe (34,999 coins). See creator earnings and gift prices worldwide."
+        keywords="tiktok gift value calculator, rose gift cost, lion gift tiktok, galaxy gift price, universe gift cost, tiktok gift prices"
         canonical="https://tokrecharge.com/gift-value"
         schemaData={schemaData}
       />

@@ -37,9 +37,9 @@ export default function EarningsEstimatorPage() {
   return (
     <>
       <SEOHead 
-        title="TikTok Earnings Calculator - Estimate Creator Income | TokRecharge.com"
-        description="Calculate your TikTok earnings from gifts and live streams. Estimate how much you can earn as a TikTok creator with our free earnings calculator."
-        keywords="tiktok earnings calculator, tiktok live earnings, tiktok creator income, tiktok monetization"
+        title="TikTok Earnings Calculator - Creator Income from Gifts & Live Streams | TokRecharge.com"
+        description="Calculate TikTok creator earnings from live stream gifts and diamonds. Estimate monthly income, see commission rates, and plan your TikTok monetization strategy with accurate calculations."
+        keywords="tiktok earnings calculator, tiktok creator income, tiktok live stream earnings, tiktok diamond calculator, creator monetization"
         canonical="https://tokrecharge.com/earnings-estimator"
         schemaData={schemaData}
       />
