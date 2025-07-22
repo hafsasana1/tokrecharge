@@ -28,11 +28,15 @@ import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import TermsOfServicePage from "@/pages/TermsOfServicePage";
+import ToolsPage from "@/pages/ToolsPage";
+import CountriesPage from "@/pages/CountriesPage";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={HomePage} />
+      <Route path="/tools" component={ToolsPage} />
+      <Route path="/countries" component={CountriesPage} />
       <Route path="/coin-calculator" component={CoinCalculatorPage} />
       <Route path="/gift-value" component={GiftValuePage} />
       <Route path="/earnings-estimator" component={EarningsEstimatorPage} />

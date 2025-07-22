@@ -9,9 +9,9 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navigation = [
-    { name: 'Tools', href: '#tools', icon: Calculator },
+    { name: 'Tools', href: '/tools', icon: Calculator },
     { name: 'Blog', href: '/blog', icon: BookOpen },
-    { name: 'Countries', href: '#countries', icon: Globe },
+    { name: 'Countries', href: '/countries', icon: Globe },
     { name: 'Trends', href: '/trends', icon: TrendingUp },
   ];
 
@@ -33,14 +33,14 @@ export default function Header() {
             {navigation.map((item) => {
               const Icon = item.icon;
               return (
-                <a
+                <Link
                   key={item.name}
                   href={item.href}
                   className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium hover:scale-105 group"
                 >
                   <Icon className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
                   <span>{item.name}</span>
-                </a>
+                </Link>
               );
             })}
           </div>
@@ -58,7 +58,7 @@ export default function Header() {
                 {navigation.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <a
+                    <Link
                       key={item.name}
                       href={item.href}
                       className="flex items-center space-x-3 text-gray-600 hover:text-purple-600 transition-colors duration-300 text-lg font-medium"
@@ -66,7 +66,7 @@ export default function Header() {
                     >
                       <Icon className="w-5 h-5" />
                       <span>{item.name}</span>
-                    </a>
+                    </Link>
                   );
                 })}
               </div>
