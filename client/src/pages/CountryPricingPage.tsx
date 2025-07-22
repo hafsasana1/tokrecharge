@@ -1,4 +1,4 @@
-import { useParams } from 'wouter';
+import { useParams, useSearch } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -12,6 +12,9 @@ import type { Country, RechargePackage } from '@shared/schema';
 
 export default function CountryPricingPage() {
   const { country } = useParams();
+  const search = useSearch();
+  const urlParams = new URLSearchParams(search);
+  const countryParam = country || urlParams.get('country');
   
   const { data: countries = [] } = useQuery<Country[]>({
     queryKey: ['/api/countries'],
@@ -23,8 +26,9 @@ export default function CountryPricingPage() {
 
   // Find country by URL parameter (handle multiple formats)
   const countryData = countries.find(c => {
+    if (!countryParam) return false;
     const countryName = c.name.toLowerCase().replace(/\s+/g, '-');
-    const urlCountry = country?.toLowerCase();
+    const urlCountry = countryParam.toLowerCase();
     return countryName === urlCountry || 
            c.name.toLowerCase() === urlCountry?.replace(/-/g, ' ') ||
            c.code.toLowerCase() === urlCountry;
@@ -56,7 +60,7 @@ export default function CountryPricingPage() {
     "@type": "WebPage",
     "name": `TikTok Coin Prices in ${countryData.name}`,
     "description": `TikTok coin recharge prices and packages available in ${countryData.name}`,
-    "url": `https://tokrecharge.com/coins-in-${country}`,
+    "url": `https://tokrecharge.com/coins-in-${countryParam}`,
     "about": {
       "@type": "Product",
       "name": "TikTok Coins",
@@ -70,7 +74,7 @@ export default function CountryPricingPage() {
         title={`TikTok Coin Prices in ${countryData.name} - Complete ${countryData.currency} Package Guide | TokRecharge.com`}
         description={`Complete TikTok coin pricing guide for ${countryData.name}. Live ${countryData.currency} rates, bulk packages, best deals, and coin cost comparison. Updated ${new Date().getFullYear()} pricing.`}
         keywords={`tiktok coins ${countryData.name.toLowerCase()}, ${countryData.currency.toLowerCase()} coin prices, buy tiktok coins ${countryData.name.toLowerCase()}, coin packages ${countryData.code.toLowerCase()}`}
-        canonical={`https://tokrecharge.com/coins-in-${country}`}
+        canonical={`https://tokrecharge.com/coins-in-${countryParam}`}
         schemaData={schemaData}
       />
       
