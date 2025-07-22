@@ -21,10 +21,14 @@ export default function CountryPricingPage() {
     queryKey: ['/api/recharge-packages'],
   });
 
-  // Find country by URL parameter
-  const countryData = countries.find(c => 
-    c.name.toLowerCase().replace(' ', '-') === country?.toLowerCase()
-  );
+  // Find country by URL parameter (handle multiple formats)
+  const countryData = countries.find(c => {
+    const countryName = c.name.toLowerCase().replace(/\s+/g, '-');
+    const urlCountry = country?.toLowerCase();
+    return countryName === urlCountry || 
+           c.name.toLowerCase() === urlCountry?.replace(/-/g, ' ') ||
+           c.code.toLowerCase() === urlCountry;
+  });
 
   const packages = allPackages.filter(pkg => pkg.countryId === countryData?.id);
 
