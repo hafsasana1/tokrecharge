@@ -64,5 +64,49 @@ export const toolsData = [
     category: "calculator",
     isActive: true,
     createdAt: new Date('2024-01-01')
+  },
+  {
+    id: 7,
+    name: "Live Gift Simulator",
+    slug: "gift-simulator",
+    description: "Simulate sending gifts to TikTok creators",
+    icon: "sparkles",
+    color: "from-pink-500 to-orange-500",
+    category: "simulator",
+    isActive: true,
+    createdAt: new Date('2025-07-23')
+  },
+  {
+    id: 8,
+    name: "Gift Ranking",
+    slug: "gift-ranking",
+    description: "Complete TikTok gift price list",
+    icon: "trophy",
+    color: "from-yellow-500 to-orange-500",
+    category: "reference",
+    isActive: true,
+    createdAt: new Date('2025-07-23')
+  },
+  {
+    id: 9,
+    name: "Top Gifter Estimator",
+    slug: "gifter-estimator",
+    description: "Estimate user's total gifted amount",
+    icon: "crown",
+    color: "from-purple-500 to-pink-500",
+    category: "estimator",
+    isActive: true,
+    createdAt: new Date('2025-07-23')
+  },
+  {
+    id: 10,
+    name: "Coin Offer Alerts",
+    slug: "coin-offer-alerts",
+    description: "Get notified about coin discounts",
+    icon: "bell",
+    color: "from-blue-500 to-cyan-500",
+    category: "alerts",
+    isActive: true,
+    createdAt: new Date('2025-07-23')
   }
 ];

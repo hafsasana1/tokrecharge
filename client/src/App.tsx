@@ -31,6 +31,10 @@ import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import TermsOfServicePage from "@/pages/TermsOfServicePage";
 import ToolsPage from "@/pages/ToolsPage";
 import CountriesPage from "@/pages/CountriesPage";
+import GiftSimulatorPage from "@/pages/GiftSimulatorPage";
+import GiftRankingPage from "@/pages/GiftRankingPage";
+import GifterEstimatorPage from "@/pages/GifterEstimatorPage";
+import CoinOfferAlertsPage from "@/pages/CoinOfferAlertsPage";
 
 function Router() {
   console.log('Router component loaded');
@@ -45,6 +49,10 @@ function Router() {
       <Route path="/recharge-prices" component={RechargePricesPage} />
       <Route path="/coin-to-diamond" component={CoinToDiamondPage} />
       <Route path="/withdraw-value" component={WithdrawValuePage} />
+      <Route path="/gift-simulator" component={GiftSimulatorPage} />
+      <Route path="/gift-ranking" component={GiftRankingPage} />
+      <Route path="/gifter-estimator" component={GifterEstimatorPage} />
+      <Route path="/coin-offer-alerts" component={CoinOfferAlertsPage} />
       <Route path="/country-pricing" component={CountryPricingPage} />
       <Route path="/country-pricing/:country" component={CountryPricingPage} />
       <Route path="/coins-in-united-states" component={CountryPricingPage} />
