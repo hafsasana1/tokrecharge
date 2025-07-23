@@ -211,6 +211,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public analytics tracking endpoint
+  app.post("/api/track/visit", async (req: Request, res: Response) => {
+    try {
+      const { page, title, referer, sessionId } = req.body;
+      const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
+      const userAgent = req.headers['user-agent'] || '';
+      
+      // Create visitor log
+      await storage.createVisitorLog({
+        sessionId,
+        ipAddress,
+        page,
+        pageTitle: title,
+        referer,
+        userAgent,
+        country: null, // Will be populated by geo-IP lookup in production
+        city: null,
+        device: userAgent.includes('Mobile') ? 'mobile' : 'desktop',
+        browser: userAgent.includes('Chrome') ? 'Chrome' : 'Other',
+        isUnique: true
+      });
+
+      // Create page view
+      await storage.createPageView({
+        sessionId,
+        ipAddress,
+        page,
+        pageTitle: title,
+        referer,
+        country: null,
+        device: userAgent.includes('Mobile') ? 'mobile' : 'desktop',
+        browser: userAgent.includes('Chrome') ? 'Chrome' : 'Other'
+      });
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Failed to track visit:', error);
+      res.status(500).json({ error: 'Failed to track visit' });
+    }
+  });
+
+  // Public real-time users endpoint
+  app.post("/api/track/active", async (req: Request, res: Response) => {
+    try {
+      const { page, sessionId } = req.body;
+      const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
+      const userAgent = req.headers['user-agent'] || '';
+      
+      await storage.upsertActiveUser({
+        sessionId,
+        ipAddress,
+        page,
+        userAgent,
+        country: null,
+        city: null,
+        device: userAgent.includes('Mobile') ? 'mobile' : 'desktop',
+        browser: userAgent.includes('Chrome') ? 'Chrome' : 'Other'
+      });
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Failed to track active user:', error);
+      res.status(500).json({ error: 'Failed to track active user' });
+    }
+  });
+
   // =============================================================================
   // AUTHENTICATION ENDPOINTS
   // =============================================================================
@@ -239,25 +305,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ADMIN ENDPOINTS (Protected)
   // =============================================================================
 
-  // Dashboard stats
+  // Enhanced dashboard stats with comprehensive analytics
   app.get("/api/admin/dashboard", requireAuth, async (req: AuthRequest, res: Response) => {
     try {
       const [
         totalTools,
         totalCountries,
         totalBlogPosts,
-        recentVisitors,
-        countryStats,
-        pageStats,
-        dailyStats
+        analyticsData,
+        activeUsersCount,
+        popularPages,
+        topTrafficSources
       ] = await Promise.all([
         storage.getTools().then(tools => tools.length),
         storage.getCountries().then(countries => countries.length),
         storage.getBlogPosts().then(posts => posts.length),
-        storage.getVisitorLogs(100),
-        storage.getVisitorStatsByCountry(),
-        storage.getVisitorStatsByPage(),
-        storage.getDailyVisitorCount()
+        storage.getAnalyticsSummary(30),
+        storage.getActiveUsersCount(),
+        storage.getPopularPages(5),
+        storage.getTopTrafficSources(5)
       ]);
 
       res.json({
@@ -265,13 +331,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
           totalTools,
           totalCountries,
           totalBlogPosts,
-          totalVisitors: recentVisitors.length
+          totalVisitors: analyticsData.totalVisitors,
+          uniqueVisitors: analyticsData.uniqueVisitors,
+          pageViews: analyticsData.pageViews,
+          activeUsers: activeUsersCount,
+          growth: analyticsData.growth
         },
-        recentVisitors: recentVisitors.slice(0, 10),
         analytics: {
-          topCountries: countryStats.slice(0, 5),
-          topPages: pageStats.slice(0, 5),
-          dailyVisitors: dailyStats.slice(-7) // Last 7 days
+          topCountries: analyticsData.topCountries,
+          topPages: popularPages,
+          topSources: topTrafficSources,
+          bounceRate: analyticsData.bounceRate,
+          avgSessionDuration: analyticsData.avgSessionDuration
+        },
+        charts: {
+          performance: [
+            { name: 'Page Views', value: analyticsData.pageViews, color: '#FF1744' },
+            { name: 'Unique Visitors', value: analyticsData.uniqueVisitors, color: '#9C27B0' },
+            { name: 'Total Visitors', value: analyticsData.totalVisitors, color: '#3F51B5' }
+          ]
         }
       });
     } catch (error) {
@@ -344,7 +422,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Visitor analytics
+  // Comprehensive Analytics endpoints
   app.get("/api/admin/analytics/visitors", requireAuth, async (req: AuthRequest, res: Response) => {
     try {
       const limit = req.query.limit ? parseInt(req.query.limit as string) : 50;
@@ -352,6 +430,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(visitors);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch visitor data" });
+    }
+  });
+
+  app.get("/api/admin/analytics/overview", requireAuth, async (req: AuthRequest, res: Response) => {
+    try {
+      const days = req.query.days ? parseInt(req.query.days as string) : 30;
+      const summary = await storage.getAnalyticsSummary(days);
+      res.json(summary);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch analytics overview" });
+    }
+  });
+
+  app.get("/api/admin/analytics/active-users", requireAuth, async (req: AuthRequest, res: Response) => {
+    try {
+      const [activeUsers, count] = await Promise.all([
+        storage.getActiveUsers(),
+        storage.getActiveUsersCount()
+      ]);
+      res.json({
+        activeUsers,
+        count,
+        updated: new Date().toISOString()
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch active users" });
+    }
+  });
+
+  app.get("/api/admin/analytics/page-views", requireAuth, async (req: AuthRequest, res: Response) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 100;
+      const startDate = req.query.startDate as string;
+      const endDate = req.query.endDate as string;
+      
+      let pageViews;
+      if (startDate && endDate) {
+        pageViews = await storage.getPageViewsByDateRange(startDate, endDate);
+      } else {
+        pageViews = await storage.getPageViews(limit);
+      }
+      
+      res.json(pageViews);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch page views" });
+    }
+  });
+
+  app.get("/api/admin/analytics/popular-pages", requireAuth, async (req: AuthRequest, res: Response) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+      const popularPages = await storage.getPopularPages(limit);
+      res.json(popularPages);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch popular pages" });
+    }
+  });
+
+  app.get("/api/admin/analytics/traffic-sources", requireAuth, async (req: AuthRequest, res: Response) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+      const [allSources, topSources] = await Promise.all([
+        storage.getTrafficSources(limit),
+        storage.getTopTrafficSources(limit)
+      ]);
+      res.json({
+        sources: allSources,
+        topSources
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch traffic sources" });
     }
   });
 
@@ -370,6 +519,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(stats);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch page stats" });
+    }
+  });
+
+  app.get("/api/admin/analytics/daily", requireAuth, async (req: AuthRequest, res: Response) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 30;
+      const [dailyVisitors, dailyAnalytics] = await Promise.all([
+        storage.getDailyVisitorCount(),
+        storage.getDailyAnalytics(limit)
+      ]);
+      res.json({
+        dailyVisitors: dailyVisitors.slice(-limit),
+        dailyAnalytics
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch daily analytics" });
     }
   });
 
@@ -534,7 +699,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // File upload endpoint
-  app.post("/api/admin/upload", requireAuth, upload.single('file'), async (req: AuthRequest, res: Response) => {
+  app.post("/api/admin/upload", requireAuth, upload.single('file') as any, async (req: AuthRequest, res: Response) => {
     try {
       if (!req.file) {
         return res.status(400).json({ error: "No file uploaded" });

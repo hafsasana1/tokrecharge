@@ -92,16 +92,96 @@ export const siteSettings = pgTable("site_settings", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Visitor tracking table
+// Enhanced visitor tracking table
 export const visitorLogs = pgTable("visitor_logs", {
   id: serial("id").primaryKey(),
+  sessionId: varchar("session_id", { length: 255 }),
   ipAddress: varchar("ip_address", { length: 45 }).notNull(),
   country: text("country"),
   city: text("city"),
+  region: text("region"),
+  timezone: text("timezone"),
   userAgent: text("user_agent"),
+  browser: text("browser"),
+  os: text("os"),
+  device: text("device"), // mobile, desktop, tablet
   referer: text("referer"),
+  utmSource: text("utm_source"),
+  utmMedium: text("utm_medium"),
+  utmCampaign: text("utm_campaign"),
   page: text("page").notNull(),
+  pageTitle: text("page_title"),
+  timeOnPage: integer("time_on_page"), // seconds
+  isUnique: boolean("is_unique").default(true),
   visitedAt: timestamp("visited_at").defaultNow(),
+});
+
+// Page views tracking
+export const pageViews = pgTable("page_views", {
+  id: serial("id").primaryKey(),
+  sessionId: varchar("session_id", { length: 255 }),
+  ipAddress: varchar("ip_address", { length: 45 }).notNull(),
+  page: text("page").notNull(),
+  pageTitle: text("page_title"),
+  referer: text("referer"),
+  timeOnPage: integer("time_on_page"), // seconds
+  scrollDepth: integer("scroll_depth"), // percentage
+  country: text("country"),
+  device: text("device"),
+  browser: text("browser"),
+  viewedAt: timestamp("viewed_at").defaultNow(),
+});
+
+// Real-time active users
+export const activeUsers = pgTable("active_users", {
+  id: serial("id").primaryKey(),
+  sessionId: varchar("session_id", { length: 255 }).notNull().unique(),
+  ipAddress: varchar("ip_address", { length: 45 }).notNull(),
+  country: text("country"),
+  city: text("city"),
+  page: text("page").notNull(),
+  userAgent: text("user_agent"),
+  browser: text("browser"),
+  device: text("device"),
+  lastSeen: timestamp("last_seen").defaultNow(),
+  firstSeen: timestamp("first_seen").defaultNow(),
+});
+
+// Traffic sources tracking
+export const trafficSources = pgTable("traffic_sources", {
+  id: serial("id").primaryKey(),
+  sessionId: varchar("session_id", { length: 255 }),
+  source: text("source").notNull(), // direct, google, facebook, twitter, etc
+  medium: text("medium"), // organic, referral, cpc, email, etc
+  campaign: text("campaign"),
+  term: text("term"),
+  content: text("content"),
+  referer: text("referer"),
+  landingPage: text("landing_page").notNull(),
+  country: text("country"),
+  sessions: integer("sessions").default(1),
+  pageViews: integer("page_views").default(1),
+  bounceRate: decimal("bounce_rate", { precision: 5, scale: 2 }),
+  avgSessionDuration: integer("avg_session_duration"), // seconds
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Daily analytics summary
+export const dailyAnalytics = pgTable("daily_analytics", {
+  id: serial("id").primaryKey(),
+  date: timestamp("date").notNull(),
+  totalVisitors: integer("total_visitors").default(0),
+  uniqueVisitors: integer("unique_visitors").default(0),
+  pageViews: integer("page_views").default(0),
+  sessions: integer("sessions").default(0),
+  bounceRate: decimal("bounce_rate", { precision: 5, scale: 2 }),
+  avgSessionDuration: integer("avg_session_duration"), // seconds
+  topCountries: json("top_countries"), // {country: count}
+  topPages: json("top_pages"), // {page: views}
+  topSources: json("top_sources"), // {source: sessions}
+  deviceBreakdown: json("device_breakdown"), // {device: count}
+  browserBreakdown: json("browser_breakdown"), // {browser: count}
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // AdSense ads table
@@ -176,6 +256,27 @@ export const insertVisitorLogSchema = createInsertSchema(visitorLogs).omit({
   visitedAt: true,
 });
 
+export const insertPageViewSchema = createInsertSchema(pageViews).omit({
+  id: true,
+  viewedAt: true,
+});
+
+export const insertActiveUserSchema = createInsertSchema(activeUsers).omit({
+  id: true,
+  lastSeen: true,
+  firstSeen: true,
+});
+
+export const insertTrafficSourceSchema = createInsertSchema(trafficSources).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertDailyAnalyticsSchema = createInsertSchema(dailyAnalytics).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertAdsenseSchema = createInsertSchema(adsense).omit({
   id: true,
   createdAt: true,
@@ -240,3 +341,15 @@ export type CommissionSetting = typeof commissionSettings.$inferSelect;
 export type InsertCommissionSetting = z.infer<typeof insertCommissionSettingSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type SiteSettingsResponse = z.infer<typeof siteSettingsResponseSchema>;
+
+export type PageView = typeof pageViews.$inferSelect;
+export type InsertPageView = z.infer<typeof insertPageViewSchema>;
+
+export type ActiveUser = typeof activeUsers.$inferSelect;
+export type InsertActiveUser = z.infer<typeof insertActiveUserSchema>;
+
+export type TrafficSource = typeof trafficSources.$inferSelect;
+export type InsertTrafficSource = z.infer<typeof insertTrafficSourceSchema>;
+
+export type DailyAnalytics = typeof dailyAnalytics.$inferSelect;
+export type InsertDailyAnalytics = z.infer<typeof insertDailyAnalyticsSchema>;

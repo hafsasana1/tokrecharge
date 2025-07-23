@@ -21,7 +21,8 @@ import AdminBlogPage from "@/pages/AdminBlogPage";
 import AdminBlogNewPage from "@/pages/AdminBlogNewPage";
 import AdminBlogEditPage from "@/pages/AdminBlogEditPage";
 import AdminSettingsPage from "@/pages/AdminSettingsPage";
-import AdminAnalyticsPage from "@/pages/AdminAnalyticsPage";
+import EnhancedAdminAnalyticsPage from "@/pages/EnhancedAdminAnalyticsPage";
+import AnalyticsTracker from "@/components/analytics/AnalyticsTracker";
 import AdminAdsPage from "@/pages/AdminAdsPage";
 import AdminToolsPage from "@/pages/AdminToolsPage";
 import AboutPage from "@/pages/AboutPage";
@@ -86,7 +87,7 @@ function Router() {
       <Route path="/admin/blog/edit/:id" component={AdminBlogEditPage} />
       <Route path="/admin/blog" component={AdminBlogPage} />
       <Route path="/admin/settings" component={AdminSettingsPage} />
-      <Route path="/admin/analytics" component={AdminAnalyticsPage} />
+      <Route path="/admin/analytics" component={EnhancedAdminAnalyticsPage} />
       <Route path="/admin/ads" component={AdminAdsPage} />
       <Route path="/admin/tools" component={AdminToolsPage} />
       <Route path="/admin/countries" component={AdminDashboardPage} />
@@ -102,6 +103,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
+        <AnalyticsTracker />
         <Router />
       </TooltipProvider>
     </QueryClientProvider>
