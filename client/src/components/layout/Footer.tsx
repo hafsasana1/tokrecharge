@@ -13,7 +13,7 @@ export default function Footer() {
     { 
       id: 'usa',
       name: '🇺🇸 USA Pricing',
-      href: '/country-pricing?country=us',
+      href: '/coins-in-united-states',
       flag: '🇺🇸',
       code: 'US',
       label: 'USA Pricing'
@@ -21,7 +21,7 @@ export default function Footer() {
     { 
       id: 'india',
       name: '🇮🇳 India Pricing',
-      href: '/country-pricing?country=in',
+      href: '/coins-in-india',
       flag: '🇮🇳',
       code: 'IN',
       label: 'India Pricing'
@@ -29,7 +29,7 @@ export default function Footer() {
     { 
       id: 'pakistan',
       name: '🇵🇰 Pakistan Pricing',
-      href: '/country-pricing?country=pk',
+      href: '/coins-in-pakistan',
       flag: '🇵🇰',
       code: 'PK',
       label: 'Pakistan Pricing'

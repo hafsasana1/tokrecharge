@@ -215,7 +215,7 @@ export default function CountryPricingSection() {
                   </div>
                 </div>
 
-                <Link href={`/country-pricing/${country.code.toLowerCase()}`}>
+                <Link href={`/coins-in-${country.name.toLowerCase().replace(/\s+/g, '-')}`}>
                   <Button 
                     variant="ghost" 
                     className="w-full mt-4 group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:text-white transition-all duration-300"

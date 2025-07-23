@@ -9,7 +9,7 @@ interface CountryCardProps {
 }
 
 export default function CountryCard({ country, samplePrice }: CountryCardProps) {
-  const countrySlug = country.name.toLowerCase().replace(' ', '-');
+  const countrySlug = country.name.toLowerCase().replace(/\s+/g, '-');
   
   return (
     <Card className="text-center hover:shadow-2xl hover:scale-105 transition-all duration-300 border-0 bg-white rounded-2xl overflow-hidden group">

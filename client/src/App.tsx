@@ -44,6 +44,7 @@ function Router() {
       <Route path="/coin-to-diamond" component={CoinToDiamondPage} />
       <Route path="/withdraw-value" component={WithdrawValuePage} />
       <Route path="/country-pricing" component={CountryPricingPage} />
+      <Route path="/country-pricing/:country" component={CountryPricingPage} />
       <Route path="/coins-in-:country" component={CountryPricingPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
