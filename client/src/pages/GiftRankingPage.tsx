@@ -313,6 +313,76 @@ export default function GiftRankingPage() {
             </div>
           </section>
 
+          {/* FAQ Section */}
+          <section className="py-12">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-xl text-gray-600">
+                  Everything you need to know about TikTok gift prices and rankings
+                </p>
+              </div>
+              
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">What is the most expensive TikTok gift in 2025?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">The Universe gift is currently the most expensive TikTok gift, costing 34,999 coins (approximately $524.99 USD). It's classified as a Legendary rarity gift and is the ultimate show of support for creators.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">How much does the Lion gift cost on TikTok?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">While the Lion gift isn't currently in our database, premium gifts typically cost between 1,000-10,000 coins. Check our complete gift ranking table above for the most accurate and up-to-date pricing information.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">What do the gift rarity levels mean?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Gift rarities indicate exclusivity and cost: Common gifts (like Rose) cost 1-20 coins, Rare gifts cost 50-500 coins, Epic gifts cost 500-5,000 coins, and Legendary gifts (like Universe) cost 10,000+ coins.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">How are TikTok coin prices calculated?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">TikTok coin prices are based on the standard rate of approximately $0.015 per coin (or about 67 coins per $1 USD). Prices may vary slightly by country and payment method.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Do creators receive the full gift value?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">No, creators typically receive about 50% of the gift's coin value in diamonds, which can then be converted to cash. TikTok takes a commission for platform services and payment processing.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Are gift prices the same worldwide?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Gift prices in coins remain the same globally, but the USD equivalent varies by country due to different coin purchase rates. Some regions offer better value for coin purchases than others.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </section>
+
           {/* Related Tools */}
           <section className="py-12">
             <div className="text-center mb-8">

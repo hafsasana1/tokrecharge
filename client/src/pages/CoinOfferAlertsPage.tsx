@@ -348,6 +348,76 @@ export default function CoinOfferAlertsPage() {
             </div>
           </section>
 
+          {/* FAQ Section */}
+          <section className="py-12">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-xl text-gray-600">
+                  Everything about TikTok coin offers and discount notifications
+                </p>
+              </div>
+              
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">How often do TikTok coin discounts happen?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">TikTok coin discounts typically occur during major holidays, special events, and promotional periods. Bundle offers and regional promotions can happen monthly, while major discounts (20-50% off) are less frequent but more valuable.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">What types of coin offers will I receive alerts for?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">You'll receive alerts for price discounts (percentage off regular prices), bundle offers (bonus coins with purchase), limited-time promotions, and regional rate changes that could save you money.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Are the alerts really free?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Yes, our coin offer alert service is completely free. We monitor TikTok pricing across regions and notify subscribers about legitimate money-saving opportunities without any cost or subscription fees.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">How much money can I save with coin offer alerts?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Savings vary by offer type and region. Bundle deals can provide 10-25% extra coins, while major promotional discounts can save 20-50% off regular prices. Regional arbitrage can save 15-30% by purchasing from lower-cost countries.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Can I unsubscribe from coin offer alerts?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Absolutely. Every alert email includes an unsubscribe link for instant removal. You can also modify your alert preferences or pause notifications temporarily without losing your subscription.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Which countries have the best TikTok coin prices?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Coin prices vary by region due to local economic factors. Countries like India, Pakistan, and some Eastern European regions often have lower coin prices, while Western countries typically have higher rates. Our alerts help you find the best current deals.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </section>
+
           {/* Related Tools */}
           <section className="py-12">
             <div className="text-center mb-8">

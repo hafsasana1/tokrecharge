@@ -99,7 +99,6 @@ export default function GiftSimulatorPage() {
         description="Simulate sending TikTok gifts to any creator! See coin costs, USD values, and estimated creator earnings with our realistic gift simulator tool."
         canonical="https://tokrecharge.com/gift-simulator"
         keywords="tiktok gift simulator, tiktok live gifts, gift sending simulation, tiktok coin calculator, creator earnings simulator"
-        ogTitle="TikTok Live Gift Simulator - See Real Gift Costs & Creator Earnings"
         ogDescription="Try our TikTok gift simulator! Enter any username and see realistic gift costs, coin spending, and creator earnings in real-time."
         schemaData={schemaData}
       />
@@ -262,6 +261,76 @@ export default function GiftSimulatorPage() {
                 </div>
               </CardContent>
             </Card>
+          </section>
+
+          {/* FAQ Section */}
+          <section className="py-12">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-xl text-gray-600">
+                  Common questions about TikTok gift simulation and creator earnings
+                </p>
+              </div>
+              
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Does the gift simulator send real gifts to creators?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">No, this is a simulation tool only. No real gifts are sent and no real money is spent. The simulator shows what would happen if you sent gifts to a creator, helping you understand costs before making actual purchases.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">How accurate are the coin costs and creator earnings shown?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">The coin costs are based on actual TikTok gift prices. Creator earnings use TikTok's standard 50% revenue share rate. However, actual earnings may vary based on TikTok's policies, taxes, and regional differences.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Can I simulate gifts for any TikTok username?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Yes, you can enter any TikTok username. The simulation generates realistic gift scenarios based on statistical patterns, but results are for entertainment and estimation purposes only.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">What's the most expensive TikTok gift I can simulate?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">The simulator includes all TikTok gifts from the basic Rose (1 coin) to premium gifts like Universe (34,999 coins). The most expensive gifts cost over $500 USD equivalent.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">How do I share my simulation results?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">After running a simulation, click the "Share Your Simulated Gift Earnings!" button. This will create a shareable message with the simulation results that you can post on social media or send to friends.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Are the gift distribution patterns realistic?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Yes, the simulator uses realistic distribution patterns based on typical TikTok gifting behavior. More expensive gifts appear less frequently, while common gifts like roses and hearts are more prevalent in the simulation.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </section>
 
           {/* Related Tools */}

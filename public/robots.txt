@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://tokrecharge.com/sitemap.xml
+
+# Disallow admin pages
+Disallow: /admin/
+
+# Allow all tools and public pages
+Allow: /coin-calculator
+Allow: /gift-value
+Allow: /earnings-estimator
+Allow: /recharge-prices
+Allow: /coin-to-diamond
+Allow: /withdraw-value
+Allow: /gift-simulator
+Allow: /gift-ranking
+Allow: /gifter-estimator
+Allow: /coin-offer-alerts
+Allow: /tools
+Allow: /countries
+Allow: /country-pricing
+Allow: /blog
+Allow: /trends
+Allow: /about
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+
+# Crawl delay
+Crawl-delay: 1

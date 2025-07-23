@@ -316,6 +316,76 @@ export default function GifterEstimatorPage() {
             </Card>
           </section>
 
+          {/* FAQ Section */}
+          <section className="py-12">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-xl text-gray-600">
+                  Understanding TikTok gifter analysis and spending estimation
+                </p>
+              </div>
+              
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">How does the TikTok gifter estimator work?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">The estimator uses username patterns, statistical modeling, and algorithmic analysis to generate realistic spending estimates. It's based on typical TikTok user behavior patterns but is for entertainment purposes only.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Are the spending estimates accurate?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">The estimates are based on statistical patterns and username analysis, but actual spending may vary significantly. This tool is designed for entertainment and general estimation purposes, not precise financial tracking.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">What makes someone a "VIP Supporter" vs "Casual Gifter"?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Rankings are based on estimated total spending: Casual Gifters (under $500), Regular Gifters ($500+), Active Gifters ($1,000+), Premium Gifters ($5,000+), and VIP Supporters ($10,000+). These reflect different levels of engagement with TikTok's gifting system.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Can I check my own TikTok gifting stats?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Yes, you can enter your own TikTok username to see estimated spending. However, for actual spending history, check your TikTok app's purchase history in Settings &gt; Balance for precise records.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">How much do top TikTok gifters typically spend?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">Top gifters (VIP Supporters) can spend $10,000+ annually on TikTok gifts. Some heavy users spend hundreds or thousands monthly supporting their favorite creators through premium gifts like Universe and Galaxy.</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Does TikTok track user gifting behavior?</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">TikTok tracks gifting for payment processing and creator payouts, but individual spending data isn't publicly available. Our estimator uses pattern analysis rather than accessing any private TikTok data.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </section>
+
           {/* Related Tools */}
           <section className="py-12">
             <div className="text-center mb-8">
