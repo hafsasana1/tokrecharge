@@ -32,6 +32,7 @@ import ToolsPage from "@/pages/ToolsPage";
 import CountriesPage from "@/pages/CountriesPage";
 
 function Router() {
+  console.log('Router component loaded');
   return (
     <Switch>
       <Route path="/" component={HomePage} />
@@ -45,7 +46,12 @@ function Router() {
       <Route path="/withdraw-value" component={WithdrawValuePage} />
       <Route path="/country-pricing" component={CountryPricingPage} />
       <Route path="/country-pricing/:country" component={CountryPricingPage} />
-      <Route path="/coins-in-:country" component={CountryPricingPage} />
+      <Route path="/coins-in-:country">
+        {(params) => {
+          console.log('Coins route matched:', params);
+          return <CountryPricingPage />;
+        }}
+      </Route>
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
       <Route path="/trends" component={TrendsPage} />
@@ -65,7 +71,12 @@ function Router() {
       <Route path="/admin/countries" component={AdminDashboardPage} />
       <Route path="/admin" component={AdminDashboardPage} />
       <Route path="/admin/*" component={AdminDashboardPage} />
-      <Route component={NotFound} />
+      <Route>
+        {() => {
+          console.log('404 route matched for unknown path');
+          return <NotFound />;
+        }}
+      </Route>
     </Switch>
   );
 }

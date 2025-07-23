@@ -17,6 +17,25 @@ export default function CountryPricingPage() {
   const urlParams = new URLSearchParams(search);
   const countryParam = country || urlParams.get('country');
   
+  console.log('CountryPricingPage rendered:', { country, search, countryParam });
+  
+  // Early return for debugging
+  if (!countryParam) {
+    console.log('No country param found, showing fallback');
+    return (
+      <>
+        <Header />
+        <div className="container mx-auto px-4 py-16">
+          <h1 className="text-3xl font-bold mb-4">Country Pricing Debug</h1>
+          <p>Country param: {String(countryParam)}</p>
+          <p>Raw country: {String(country)}</p>
+          <p>Search: {search}</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+  
   const { data: countries = [] } = useQuery<Country[]>({
     queryKey: ['/api/countries'],
   });
@@ -28,11 +47,33 @@ export default function CountryPricingPage() {
   // Find country by URL parameter (handle multiple formats)
   const countryData = countries.find(c => {
     if (!countryParam) return false;
-    const countryName = c.name.toLowerCase().replace(/\s+/g, '-');
+    
+    const countryNameSlug = c.name.toLowerCase().replace(/\s+/g, '-');
     const urlCountry = countryParam.toLowerCase();
-    return countryName === urlCountry || 
-           c.name.toLowerCase() === urlCountry?.replace(/-/g, ' ') ||
-           c.code.toLowerCase() === urlCountry;
+    const countryNameSpaced = c.name.toLowerCase();
+    const urlCountrySpaced = urlCountry.replace(/-/g, ' ');
+    
+    // Multiple matching strategies
+    const matches = [
+      countryNameSlug === urlCountry,                    // "united-states" === "united-states"
+      countryNameSpaced === urlCountrySpaced,           // "united states" === "united states"
+      c.code.toLowerCase() === urlCountry,              // "us" === "us"
+      countryNameSpaced.includes(urlCountrySpaced),     // partial match
+      urlCountrySpaced.includes(countryNameSpaced)      // reverse partial match
+    ];
+    
+    console.log('Country matching debug:', {
+      countryName: c.name,
+      countryNameSlug,
+      countryNameSpaced,
+      urlParam: countryParam,
+      urlCountry,
+      urlCountrySpaced,
+      matches,
+      result: matches.some(m => m)
+    });
+    
+    return matches.some(m => m);
   });
 
   const packages = allPackages.filter(pkg => pkg.countryId === countryData?.id);
