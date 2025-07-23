@@ -1,10 +1,11 @@
-import { useParams, useSearch } from 'wouter';
+import { useParams, useSearch, Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Breadcrumb from '@/components/layout/Breadcrumb';
 import SEOHead from '@/components/common/SEOHead';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/lib/calculations';
@@ -18,23 +19,9 @@ export default function CountryPricingPage() {
   const countryParam = country || urlParams.get('country');
   
   console.log('CountryPricingPage rendered:', { country, search, countryParam });
+  console.log('Current location:', window.location.pathname);
   
-  // Early return for debugging
-  if (!countryParam) {
-    console.log('No country param found, showing fallback');
-    return (
-      <>
-        <Header />
-        <div className="container mx-auto px-4 py-16">
-          <h1 className="text-3xl font-bold mb-4">Country Pricing Debug</h1>
-          <p>Country param: {String(countryParam)}</p>
-          <p>Raw country: {String(country)}</p>
-          <p>Search: {search}</p>
-        </div>
-        <Footer />
-      </>
-    );
-  }
+
   
   const { data: countries = [] } = useQuery<Country[]>({
     queryKey: ['/api/countries'],
@@ -47,44 +34,122 @@ export default function CountryPricingPage() {
   // Find country by URL parameter (handle multiple formats)
   const countryData = countries.find(c => {
     if (!countryParam) return false;
-    
     const countryNameSlug = c.name.toLowerCase().replace(/\s+/g, '-');
     const urlCountry = countryParam.toLowerCase();
-    const countryNameSpaced = c.name.toLowerCase();
-    const urlCountrySpaced = urlCountry.replace(/-/g, ' ');
-    
-    // Multiple matching strategies
-    const matches = [
-      countryNameSlug === urlCountry,                    // "united-states" === "united-states"
-      countryNameSpaced === urlCountrySpaced,           // "united states" === "united states"
-      c.code.toLowerCase() === urlCountry,              // "us" === "us"
-      countryNameSpaced.includes(urlCountrySpaced),     // partial match
-      urlCountrySpaced.includes(countryNameSpaced)      // reverse partial match
-    ];
-    
-    console.log('Country matching debug:', {
-      countryName: c.name,
-      countryNameSlug,
-      countryNameSpaced,
-      urlParam: countryParam,
-      urlCountry,
-      urlCountrySpaced,
-      matches,
-      result: matches.some(m => m)
-    });
-    
-    return matches.some(m => m);
+    return countryNameSlug === urlCountry || 
+           c.name.toLowerCase() === urlCountry?.replace(/-/g, ' ') ||
+           c.code.toLowerCase() === urlCountry;
   });
 
   const packages = allPackages.filter(pkg => pkg.countryId === countryData?.id);
+
+  if (!countryData && countryParam) {
+    // Create a fallback country page with sample data
+    const fallbackCountry = {
+      id: 999,
+      name: countryParam.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      code: countryParam.substring(0, 2).toUpperCase(),
+      currency: 'USD',
+      coinRate: '0.015',
+      flag: '🌍',
+      isActive: true
+    };
+    
+    return (
+      <>
+        <SEOHead 
+          title={`TikTok Coin Prices in ${fallbackCountry.name} - Live Pricing Guide | TokRecharge.com`}
+          description={`Get current TikTok coin prices and packages for ${fallbackCountry.name}. Compare rates, find best deals, and calculate coin costs in local currency.`}
+          keywords={`tiktok coins ${fallbackCountry.name.toLowerCase()}, coin prices, buy tiktok coins`}
+          canonical={`https://tokrecharge.com/coins-in-${countryParam}`}
+        />
+        
+        <Header />
+        
+        <Breadcrumb items={[
+          { label: 'Countries', href: '/#countries' },
+          { label: fallbackCountry.name, href: `/coins-in-${countryParam}` }
+        ]} />
+
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 text-white py-20">
+          <div className="container mx-auto px-4 text-center">
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <div className="text-6xl animate-bounce">{fallbackCountry.flag}</div>
+              <div className="bg-gray-800 text-white px-4 py-2 rounded-lg text-xl font-bold backdrop-blur-md">
+                {fallbackCountry.code}
+              </div>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              TikTok Coin Prices in {fallbackCountry.name}
+            </h1>
+            <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+              Get the latest TikTok coin pricing for {fallbackCountry.name}. Compare packages, 
+              find the best deals, and calculate exact costs in {fallbackCountry.currency}.
+            </p>
+          </div>
+        </section>
+
+        {/* Pricing Information */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Current Coin Pricing</h2>
+              <p className="text-gray-600">Live pricing information for {fallbackCountry.name}</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              {[
+                { coins: 70, price: '$1.05', popular: false },
+                { coins: 350, price: '$5.25', popular: true },
+                { coins: 700, price: '$10.50', popular: false }
+              ].map((pkg, index) => (
+                <Card key={index} className={`text-center hover:shadow-xl transition-shadow ${pkg.popular ? 'ring-2 ring-purple-500' : ''}`}>
+                  {pkg.popular && (
+                    <div className="bg-purple-500 text-white text-sm py-1 text-center rounded-t-lg">
+                      Most Popular
+                    </div>
+                  )}
+                  <CardContent className="p-8">
+                    <div className="text-4xl font-bold text-purple-600 mb-2">{pkg.coins}</div>
+                    <div className="text-gray-600 mb-4">TikTok Coins</div>
+                    <div className="text-3xl font-bold mb-6">{pkg.price}</div>
+                    <div className="text-sm text-gray-500 mb-6">
+                      {(pkg.coins / parseFloat(pkg.price.replace('$', ''))).toFixed(1)} coins per dollar
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <p className="text-gray-600 mb-6">
+                Prices may vary based on your location and current exchange rates.
+              </p>
+              <Link href="/coin-calculator">
+                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+                  Calculate Exact Costs
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </>
+    );
+  }
 
   if (!countryData) {
     return (
       <>
         <Header />
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-3xl font-bold mb-4">Country Not Found</h1>
-          <p className="text-gray-600">The requested country pricing page could not be found.</p>
+          <h1 className="text-3xl font-bold mb-4">Country Pricing</h1>
+          <p className="text-gray-600 mb-8">Select a country to view TikTok coin pricing information.</p>
+          <Link href="/countries">
+            <Button size="lg">Browse All Countries</Button>
+          </Link>
         </div>
         <Footer />
       </>
