@@ -65,7 +65,18 @@ export default function CountryPricingPage() {
       'south-korea': { name: 'South Korea', code: 'KR', currency: 'KRW', flag: '🇰🇷', coinRate: '19.50' },
       'italy': { name: 'Italy', code: 'IT', currency: 'EUR', flag: '🇮🇹', coinRate: '0.014' },
       'spain': { name: 'Spain', code: 'ES', currency: 'EUR', flag: '🇪🇸', coinRate: '0.014' },
-      'netherlands': { name: 'Netherlands', code: 'NL', currency: 'EUR', flag: '🇳🇱', coinRate: '0.014' }
+      'netherlands': { name: 'Netherlands', code: 'NL', currency: 'EUR', flag: '🇳🇱', coinRate: '0.014' },
+      'turkey': { name: 'Turkey', code: 'TR', currency: 'TRY', flag: '🇹🇷', coinRate: '0.45' },
+      'russia': { name: 'Russia', code: 'RU', currency: 'RUB', flag: '🇷🇺', coinRate: '1.35' },
+      'china': { name: 'China', code: 'CN', currency: 'CNY', flag: '🇨🇳', coinRate: '0.11' },
+      'singapore': { name: 'Singapore', code: 'SG', currency: 'SGD', flag: '🇸🇬', coinRate: '0.021' },
+      'thailand': { name: 'Thailand', code: 'TH', currency: 'THB', flag: '🇹🇭', coinRate: '0.55' },
+      'malaysia': { name: 'Malaysia', code: 'MY', currency: 'MYR', flag: '🇲🇾', coinRate: '0.070' },
+      'philippines': { name: 'Philippines', code: 'PH', currency: 'PHP', flag: '🇵🇭', coinRate: '0.85' },
+      'indonesia': { name: 'Indonesia', code: 'ID', currency: 'IDR', flag: '🇮🇩', coinRate: '230' },
+      'vietnam': { name: 'Vietnam', code: 'VN', currency: 'VND', flag: '🇻🇳', coinRate: '380' },
+      'saudi-arabia': { name: 'Saudi Arabia', code: 'SA', currency: 'SAR', flag: '🇸🇦', coinRate: '0.056' },
+      'uae': { name: 'UAE', code: 'AE', currency: 'AED', flag: '🇦🇪', coinRate: '0.055' }
     };
     
     const fallbackCountry = (countryMap as any)[countryParam.toLowerCase()] || {
