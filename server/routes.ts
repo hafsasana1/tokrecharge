@@ -277,6 +277,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Sitemap.xml endpoint
+  app.get("/sitemap.xml", async (req: Request, res: Response) => {
+    try {
+      const baseUrl = req.protocol + '://' + req.get('host');
+      const currentDate = new Date().toISOString().split('T')[0];
+      
+      // Get dynamic data
+      const [tools, countries, blogPosts] = await Promise.all([
+        storage.getTools(),
+        storage.getCountries(),
+        storage.getBlogPosts()
+      ]);
+
+      // Static pages
+      const staticPages = [
+        { url: '', priority: '1.0', changefreq: 'daily' },
+        { url: '/about', priority: '0.8', changefreq: 'monthly' },
+        { url: '/contact', priority: '0.8', changefreq: 'monthly' },
+        { url: '/privacy', priority: '0.6', changefreq: 'yearly' },
+        { url: '/terms', priority: '0.6', changefreq: 'yearly' },
+        { url: '/trends', priority: '0.9', changefreq: 'weekly' },
+        { url: '/country-pricing', priority: '0.9', changefreq: 'weekly' },
+        { url: '/blog', priority: '0.9', changefreq: 'daily' }
+      ];
+
+      let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+
+      // Add static pages
+      staticPages.forEach(page => {
+        sitemap += `
+  <url>
+    <loc>${baseUrl}${page.url}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`;
+      });
+
+      // Add tool pages
+      tools.forEach(tool => {
+        sitemap += `
+  <url>
+    <loc>${baseUrl}/${tool.slug}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>`;
+      });
+
+      // Add country pages
+      countries.forEach(country => {
+        const countrySlug = `coins-in-${country.name.toLowerCase().replace(/\s+/g, '-')}`;
+        sitemap += `
+  <url>
+    <loc>${baseUrl}/${countrySlug}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+      });
+
+      // Add blog posts
+      blogPosts.filter(post => post.status === 'published').forEach(post => {
+        sitemap += `
+  <url>
+    <loc>${baseUrl}/blog/${post.slug}</loc>
+    <lastmod>${post.updatedAt?.toISOString().split('T')[0] || currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+      });
+
+      sitemap += `
+</urlset>`;
+
+      res.set('Content-Type', 'application/xml');
+      res.send(sitemap);
+    } catch (error) {
+      console.error('Failed to generate sitemap:', error);
+      res.status(500).send('Failed to generate sitemap');
+    }
+  });
+
   // =============================================================================
   // AUTHENTICATION ENDPOINTS
   // =============================================================================
