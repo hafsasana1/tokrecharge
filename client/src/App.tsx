@@ -49,6 +49,18 @@ function Router() {
       <Route path="/coins-in-united-states" component={CountryPricingPage} />
       <Route path="/coins-in-india" component={CountryPricingPage} />
       <Route path="/coins-in-pakistan" component={CountryPricingPage} />
+      <Route path="/coins-in-united-kingdom" component={CountryPricingPage} />
+      <Route path="/coins-in-canada" component={CountryPricingPage} />
+      <Route path="/coins-in-australia" component={CountryPricingPage} />
+      <Route path="/coins-in-germany" component={CountryPricingPage} />
+      <Route path="/coins-in-france" component={CountryPricingPage} />
+      <Route path="/coins-in-brazil" component={CountryPricingPage} />
+      <Route path="/coins-in-mexico" component={CountryPricingPage} />
+      <Route path="/coins-in-japan" component={CountryPricingPage} />
+      <Route path="/coins-in-south-korea" component={CountryPricingPage} />
+      <Route path="/coins-in-italy" component={CountryPricingPage} />
+      <Route path="/coins-in-spain" component={CountryPricingPage} />
+      <Route path="/coins-in-netherlands" component={CountryPricingPage} />
       <Route path="/coins-in/:country" component={CountryPricingPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
