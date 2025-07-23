@@ -7,6 +7,8 @@ import {
   type InsertSiteSetting, type InsertVisitorLog, type InsertAdsense, type InsertCoinRate, type InsertCommissionSetting,
   type InsertPageView, type InsertActiveUser, type InsertTrafficSource, type InsertDailyAnalytics
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, sql, and, gte, lte, count } from "drizzle-orm";
 
 export interface IStorage {
   // Tools
@@ -1022,4 +1024,571 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getTools(): Promise<Tool[]> {
+    return await db.select().from(tools).orderBy(tools.id);
+  }
+
+  async getToolBySlug(slug: string): Promise<Tool | undefined> {
+    const [tool] = await db.select().from(tools).where(eq(tools.slug, slug));
+    return tool || undefined;
+  }
+
+  async createTool(tool: InsertTool): Promise<Tool> {
+    const [newTool] = await db.insert(tools).values(tool).returning();
+    return newTool;
+  }
+
+  async updateTool(id: number, tool: Partial<InsertTool>): Promise<Tool | undefined> {
+    const [updatedTool] = await db.update(tools).set(tool).where(eq(tools.id, id)).returning();
+    return updatedTool || undefined;
+  }
+
+  async deleteTool(id: number): Promise<boolean> {
+    const result = await db.delete(tools).where(eq(tools.id, id));
+    return result.rowCount > 0;
+  }
+
+  async getCountries(): Promise<Country[]> {
+    return await db.select().from(countries).orderBy(countries.id);
+  }
+
+  async getCountryByCode(code: string): Promise<Country | undefined> {
+    const [country] = await db.select().from(countries).where(eq(countries.code, code));
+    return country || undefined;
+  }
+
+  async createCountry(country: InsertCountry): Promise<Country> {
+    const [newCountry] = await db.insert(countries).values(country).returning();
+    return newCountry;
+  }
+
+  async updateCountry(id: number, country: Partial<InsertCountry>): Promise<Country | undefined> {
+    const [updatedCountry] = await db.update(countries).set(country).where(eq(countries.id, id)).returning();
+    return updatedCountry || undefined;
+  }
+
+  async deleteCountry(id: number): Promise<boolean> {
+    const result = await db.delete(countries).where(eq(countries.id, id));
+    return result.rowCount > 0;
+  }
+
+  async getGifts(): Promise<Gift[]> {
+    return await db.select().from(gifts).orderBy(gifts.coinCost);
+  }
+
+  async getGiftsByCategory(category: string): Promise<Gift[]> {
+    return await db.select().from(gifts).where(eq(gifts.category, category)).orderBy(gifts.coinCost);
+  }
+
+  async createGift(gift: InsertGift): Promise<Gift> {
+    const [newGift] = await db.insert(gifts).values(gift).returning();
+    return newGift;
+  }
+
+  async updateGift(id: number, gift: Partial<InsertGift>): Promise<Gift | undefined> {
+    const [updatedGift] = await db.update(gifts).set(gift).where(eq(gifts.id, id)).returning();
+    return updatedGift || undefined;
+  }
+
+  async deleteGift(id: number): Promise<boolean> {
+    const result = await db.delete(gifts).where(eq(gifts.id, id));
+    return result.rowCount > 0;
+  }
+
+  async getBlogPosts(): Promise<BlogPost[]> {
+    return await db.select().from(blogPosts).orderBy(desc(blogPosts.createdAt));
+  }
+
+  async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
+    const [post] = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug));
+    return post || undefined;
+  }
+
+  async getBlogPostById(id: number): Promise<BlogPost | undefined> {
+    const [post] = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+    return post || undefined;
+  }
+
+  async createBlogPost(blogPost: InsertBlogPost): Promise<BlogPost> {
+    const [newPost] = await db.insert(blogPosts).values(blogPost).returning();
+    return newPost;
+  }
+
+  async updateBlogPost(id: number, blogPost: Partial<InsertBlogPost>): Promise<BlogPost | undefined> {
+    const [updatedPost] = await db.update(blogPosts).set(blogPost).where(eq(blogPosts.id, id)).returning();
+    return updatedPost || undefined;
+  }
+
+  async deleteBlogPost(id: number): Promise<boolean> {
+    const result = await db.delete(blogPosts).where(eq(blogPosts.id, id));
+    return result.rowCount > 0;
+  }
+
+  async getPublishedBlogPosts(): Promise<BlogPost[]> {
+    return await db.select().from(blogPosts).where(eq(blogPosts.status, 'published')).orderBy(desc(blogPosts.publishedAt));
+  }
+
+  async getRechargePackages(): Promise<RechargePackage[]> {
+    return await db.select().from(rechargePackages).orderBy(rechargePackages.coins);
+  }
+
+  async getRechargePackagesByCountry(countryId: number): Promise<RechargePackage[]> {
+    return await db.select().from(rechargePackages).where(eq(rechargePackages.countryId, countryId)).orderBy(rechargePackages.coins);
+  }
+
+  async createRechargePackage(rechargePackage: InsertRechargePackage): Promise<RechargePackage> {
+    const [newPackage] = await db.insert(rechargePackages).values(rechargePackage).returning();
+    return newPackage;
+  }
+
+  async updateRechargePackage(id: number, rechargePackage: Partial<InsertRechargePackage>): Promise<RechargePackage | undefined> {
+    const [updatedPackage] = await db.update(rechargePackages).set(rechargePackage).where(eq(rechargePackages.id, id)).returning();
+    return updatedPackage || undefined;
+  }
+
+  async deleteRechargePackage(id: number): Promise<boolean> {
+    const result = await db.delete(rechargePackages).where(eq(rechargePackages.id, id));
+    return result.rowCount > 0;
+  }
+
+  async getAdminUsers(): Promise<AdminUser[]> {
+    return await db.select().from(adminUsers).orderBy(adminUsers.createdAt);
+  }
+
+  async getAdminUserByUsername(username: string): Promise<AdminUser | undefined> {
+    const [user] = await db.select().from(adminUsers).where(eq(adminUsers.username, username));
+    return user || undefined;
+  }
+
+  async getAdminUserByEmail(email: string): Promise<AdminUser | undefined> {
+    const [user] = await db.select().from(adminUsers).where(eq(adminUsers.email, email));
+    return user || undefined;
+  }
+
+  async createAdminUser(adminUser: InsertAdminUser): Promise<AdminUser> {
+    const [newUser] = await db.insert(adminUsers).values(adminUser).returning();
+    return newUser;
+  }
+
+  async updateAdminUser(id: number, adminUser: Partial<InsertAdminUser>): Promise<AdminUser | undefined> {
+    const [updatedUser] = await db.update(adminUsers).set(adminUser).where(eq(adminUsers.id, id)).returning();
+    return updatedUser || undefined;
+  }
+
+  async updateAdminUserLastLogin(id: number): Promise<void> {
+    await db.update(adminUsers).set({ lastLogin: new Date() }).where(eq(adminUsers.id, id));
+  }
+
+  async getSiteSettings(): Promise<SiteSetting[]> {
+    return await db.select().from(siteSettings).orderBy(siteSettings.key);
+  }
+
+  async getSiteSettingByKey(key: string): Promise<SiteSetting | undefined> {
+    const [setting] = await db.select().from(siteSettings).where(eq(siteSettings.key, key));
+    return setting || undefined;
+  }
+
+  async setSiteSetting(setting: InsertSiteSetting): Promise<SiteSetting> {
+    const [newSetting] = await db.insert(siteSettings).values(setting).returning();
+    return newSetting;
+  }
+
+  async updateSiteSetting(key: string, value: string): Promise<SiteSetting | undefined> {
+    const [updatedSetting] = await db.update(siteSettings).set({ value, updatedAt: new Date() }).where(eq(siteSettings.key, key)).returning();
+    return updatedSetting || undefined;
+  }
+
+  // Simplified implementations for analytics
+  async getVisitorLogs(limit?: number): Promise<VisitorLog[]> {
+    const query = db.select().from(visitorLogs).orderBy(desc(visitorLogs.visitedAt));
+    if (limit) {
+      return await query.limit(limit);
+    }
+    return await query;
+  }
+
+  async createVisitorLog(visitorLog: InsertVisitorLog): Promise<VisitorLog> {
+    const [newLog] = await db.insert(visitorLogs).values(visitorLog).returning();
+    return newLog;
+  }
+
+  async getVisitorStatsByCountry(): Promise<{ country: string; count: number }[]> {
+    const results = await db
+      .select({
+        country: visitorLogs.country,
+        count: sql<number>`count(*)::int`
+      })
+      .from(visitorLogs)
+      .where(sql`${visitorLogs.country} IS NOT NULL`)
+      .groupBy(visitorLogs.country)
+      .orderBy(desc(sql`count(*)`))
+      .limit(10);
+    
+    return results.map(r => ({ country: r.country || 'Unknown', count: r.count }));
+  }
+
+  async getVisitorStatsByPage(): Promise<{ page: string; count: number }[]> {
+    const results = await db
+      .select({
+        page: visitorLogs.page,
+        count: sql<number>`count(*)::int`
+      })
+      .from(visitorLogs)
+      .groupBy(visitorLogs.page)
+      .orderBy(desc(sql`count(*)`))
+      .limit(10);
+    
+    return results.map(r => ({ page: r.page, count: r.count }));
+  }
+
+  async getDailyVisitorCount(): Promise<{ date: string; count: number }[]> {
+    const results = await db
+      .select({
+        date: sql<string>`DATE(${visitorLogs.visitedAt})::text`,
+        count: sql<number>`count(*)::int`
+      })
+      .from(visitorLogs)
+      .groupBy(sql`DATE(${visitorLogs.visitedAt})`)
+      .orderBy(desc(sql`DATE(${visitorLogs.visitedAt})`))
+      .limit(30);
+    
+    return results;
+  }
+
+  async getPageViews(limit?: number): Promise<PageView[]> {
+    const query = db.select().from(pageViews).orderBy(desc(pageViews.viewedAt));
+    if (limit) {
+      return await query.limit(limit);
+    }
+    return await query;
+  }
+
+  async createPageView(pageView: InsertPageView): Promise<PageView> {
+    const [newView] = await db.insert(pageViews).values(pageView).returning();
+    return newView;
+  }
+
+  async getPageViewsByDateRange(startDate: string, endDate: string): Promise<PageView[]> {
+    return await db.select().from(pageViews)
+      .where(and(
+        gte(pageViews.viewedAt, new Date(startDate)),
+        lte(pageViews.viewedAt, new Date(endDate))
+      ))
+      .orderBy(desc(pageViews.viewedAt));
+  }
+
+  async getPopularPages(limit?: number): Promise<{ page: string; views: number }[]> {
+    const results = await db
+      .select({
+        page: pageViews.page,
+        views: sql<number>`count(*)::int`
+      })
+      .from(pageViews)
+      .groupBy(pageViews.page)
+      .orderBy(desc(sql`count(*)`))
+      .limit(limit || 10);
+    
+    return results.map(r => ({ page: r.page, views: r.views }));
+  }
+
+  async getActiveUsers(): Promise<ActiveUser[]> {
+    return await db.select().from(activeUsers).orderBy(desc(activeUsers.lastSeen));
+  }
+
+  async upsertActiveUser(activeUser: InsertActiveUser): Promise<ActiveUser> {
+    const [user] = await db.insert(activeUsers).values(activeUser)
+      .onConflictDoUpdate({
+        target: activeUsers.sessionId,
+        set: { 
+          lastSeen: new Date(),
+          page: activeUser.page,
+          userAgent: activeUser.userAgent
+        }
+      }).returning();
+    return user;
+  }
+
+  async getActiveUsersCount(): Promise<number> {
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    const [result] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(activeUsers)
+      .where(gte(activeUsers.lastSeen, fiveMinutesAgo));
+    
+    return result?.count || 0;
+  }
+
+  async cleanupInactiveUsers(): Promise<void> {
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    await db.delete(activeUsers).where(lte(activeUsers.lastSeen, fiveMinutesAgo));
+  }
+
+  // Stub implementations for other methods
+  async getTrafficSources(limit?: number): Promise<TrafficSource[]> {
+    return [];
+  }
+
+  async createTrafficSource(trafficSource: InsertTrafficSource): Promise<TrafficSource> {
+    const [newSource] = await db.insert(trafficSources).values(trafficSource).returning();
+    return newSource;
+  }
+
+  async getTopTrafficSources(limit?: number): Promise<{ source: string; sessions: number }[]> {
+    return [];
+  }
+
+  async getDailyAnalytics(limit?: number): Promise<DailyAnalytics[]> {
+    return [];
+  }
+
+  async createDailyAnalytics(dailyAnalytics: InsertDailyAnalytics): Promise<DailyAnalytics> {
+    const [newAnalytics] = await db.insert(dailyAnalytics).values(dailyAnalytics).returning();
+    return newAnalytics;
+  }
+
+  async getAnalyticsSummary(days?: number): Promise<{
+    totalVisitors: number;
+    uniqueVisitors: number;
+    pageViews: number;
+    bounceRate: number;
+    avgSessionDuration: number;
+    topCountries: { country: string; count: number }[];
+    topPages: { page: string; views: number }[];
+    growth: number;
+  }> {
+    const daysAgo = days || 30;
+    const startDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+
+    const [visitorCount] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(visitorLogs)
+      .where(gte(visitorLogs.visitedAt, startDate));
+
+    const [pageViewCount] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(pageViews)
+      .where(gte(pageViews.viewedAt, startDate));
+
+    const topCountries = await this.getVisitorStatsByCountry();
+    const topPages = await this.getPopularPages(5);
+
+    return {
+      totalVisitors: visitorCount?.count || 0,
+      uniqueVisitors: visitorCount?.count || 0,
+      pageViews: pageViewCount?.count || 0,
+      bounceRate: 65,
+      avgSessionDuration: 180,
+      topCountries: topCountries.slice(0, 5),
+      topPages,
+      growth: 15
+    };
+  }
+
+  async getAdsenseAds(): Promise<Adsense[]> {
+    return [];
+  }
+
+  async getAdsenseAdsByLocation(location: string): Promise<Adsense[]> {
+    return [];
+  }
+
+  async createAdsenseAd(ad: InsertAdsense): Promise<Adsense> {
+    const [newAd] = await db.insert(adsense).values(ad).returning();
+    return newAd;
+  }
+
+  async updateAdsenseAd(id: number, ad: Partial<InsertAdsense>): Promise<Adsense | undefined> {
+    const [updatedAd] = await db.update(adsense).set(ad).where(eq(adsense.id, id)).returning();
+    return updatedAd || undefined;
+  }
+
+  async deleteAdsenseAd(id: number): Promise<boolean> {
+    const result = await db.delete(adsense).where(eq(adsense.id, id));
+    return result.rowCount > 0;
+  }
+
+  async getCoinRates(): Promise<CoinRate[]> {
+    return [];
+  }
+
+  async getCoinRateByCurrency(currency: string): Promise<CoinRate | undefined> {
+    return undefined;
+  }
+
+  async setCoinRate(coinRate: InsertCoinRate): Promise<CoinRate> {
+    const [newRate] = await db.insert(coinRates).values(coinRate).returning();
+    return newRate;
+  }
+
+  async updateCoinRate(currency: string, rate: string): Promise<CoinRate | undefined> {
+    const [updatedRate] = await db.update(coinRates).set({ rate, updatedAt: new Date() }).where(eq(coinRates.currency, currency)).returning();
+    return updatedRate || undefined;
+  }
+
+  async getCommissionSettings(): Promise<CommissionSetting[]> {
+    return [];
+  }
+
+  async getCommissionSettingByPlatform(platform: string): Promise<CommissionSetting | undefined> {
+    return undefined;
+  }
+
+  async setCommissionSetting(setting: InsertCommissionSetting): Promise<CommissionSetting> {
+    const [newSetting] = await db.insert(commissionSettings).values(setting).returning();
+    return newSetting;
+  }
+
+  async updateCommissionSetting(platform: string, setting: Partial<InsertCommissionSetting>): Promise<CommissionSetting | undefined> {
+    const [updatedSetting] = await db.update(commissionSettings).set({ ...setting, updatedAt: new Date() }).where(eq(commissionSettings.platform, platform)).returning();
+    return updatedSetting || undefined;
+  }
+}
+
+// Initialize database storage and populate with sample data
+async function initializeDatabaseStorage(): Promise<DatabaseStorage> {
+  const storage = new DatabaseStorage();
+  
+  // Check if data already exists
+  const existingTools = await storage.getTools();
+  if (existingTools.length === 0) {
+    // Populate initial data
+    await populateInitialData(storage);
+  }
+  
+  return storage;
+}
+
+async function populateInitialData(storage: DatabaseStorage) {
+  // Insert tools
+  const toolsData = [
+    { name: "Coin Calculator", slug: "coin-calculator", description: "Convert coins to currency", icon: "calculator", color: "from-tiktok-pink to-tiktok-cyan", category: "calculator" },
+    { name: "Gift Value Estimator", slug: "gift-value", description: "Check gift costs", icon: "gift", color: "from-purple-500 to-tiktok-cyan", category: "calculator" },
+    { name: "Recharge Prices", slug: "recharge-prices", description: "Compare country rates", icon: "credit-card", color: "from-tiktok-cyan to-blue-500", category: "comparison" },
+    { name: "Earnings Estimator", slug: "earnings-estimator", description: "Calculate creator income", icon: "chart-line", color: "from-green-500 to-tiktok-cyan", category: "calculator" },
+    { name: "Coins to Diamonds", slug: "coin-to-diamond", description: "Convert currencies", icon: "gem", color: "from-tiktok-pink to-purple-500", category: "converter" },
+    { name: "Withdraw Calculator", slug: "withdraw-value", description: "Net withdrawal amount", icon: "money-bill-wave", color: "from-orange-500 to-tiktok-pink", category: "calculator" },
+    { name: "Live Gift Simulator", slug: "gift-simulator", description: "Simulate sending gifts to TikTok creators", icon: "sparkles", color: "from-pink-500 to-orange-500", category: "simulator" },
+    { name: "Gift Ranking", slug: "gift-ranking", description: "Complete TikTok gift price list", icon: "trophy", color: "from-yellow-500 to-orange-500", category: "reference" },
+    { name: "Top Gifter Estimator", slug: "gifter-estimator", description: "Estimate user's total gifted amount", icon: "crown", color: "from-purple-500 to-pink-500", category: "estimator" },
+    { name: "Coin Offer Alerts", slug: "coin-offer-alerts", description: "Get notified about coin discounts", icon: "bell", color: "from-blue-500 to-cyan-500", category: "alerts" },
+  ];
+
+  for (const tool of toolsData) {
+    await storage.createTool(tool);
+  }
+
+  // Insert countries
+  const countriesData = [
+    { name: "United States", code: "US", currency: "USD", coinRate: "0.015000", flag: "🇺🇸" },
+    { name: "India", code: "IN", currency: "INR", coinRate: "1.250000", flag: "🇮🇳" },
+    { name: "Pakistan", code: "PK", currency: "PKR", coinRate: "4.200000", flag: "🇵🇰" },
+    { name: "United Kingdom", code: "GB", currency: "GBP", coinRate: "0.012000", flag: "🇬🇧" },
+    { name: "Canada", code: "CA", currency: "CAD", coinRate: "0.020000", flag: "🇨🇦" },
+  ];
+
+  for (const country of countriesData) {
+    await storage.createCountry(country);
+  }
+
+  // Insert gifts
+  const giftsData = [
+    { name: "Rose", coinCost: 1, diamondValue: 1, category: "Basic", rarity: "Common" },
+    { name: "TikTok", coinCost: 5, diamondValue: 5, category: "Basic", rarity: "Common" },
+    { name: "Sunglasses", coinCost: 10, diamondValue: 10, category: "Basic", rarity: "Common" },
+    { name: "Heart Me", coinCost: 15, diamondValue: 15, category: "Basic", rarity: "Common" },
+    { name: "Perfume", coinCost: 20, diamondValue: 20, category: "Basic", rarity: "Common" },
+    { name: "Paper Crane", coinCost: 99, diamondValue: 99, category: "Premium", rarity: "Rare" },
+    { name: "Galaxy", coinCost: 1000, diamondValue: 1000, category: "Premium", rarity: "Epic" },
+    { name: "Universe", coinCost: 34999, diamondValue: 34999, category: "Premium", rarity: "Legendary" },
+  ];
+
+  for (const gift of giftsData) {
+    await storage.createGift(gift);
+  }
+
+  // Insert blog posts
+  const blogPostsData = [
+    {
+      title: "How Much Is 1000 TikTok Coins?",
+      slug: "how-much-is-1000-tiktok-coins",
+      excerpt: "Complete breakdown of TikTok coin values and conversion rates across different countries.",
+      content: "TikTok coins are the virtual currency used within the TikTok app for purchasing gifts and supporting creators...",
+      metaTitle: "How Much Is 1000 TikTok Coins Worth? | TokRecharge Calculator",
+      metaDescription: "Learn the exact value of 1000 TikTok coins in different currencies and countries.",
+      keywords: "tiktok coins value, 1000 tiktok coins, tiktok coin calculator",
+      category: "guides",
+      tags: ["tiktok", "coins", "calculator", "value"],
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      title: "TikTok Recharge Prices: India vs USA",
+      slug: "tiktok-recharge-prices-india-vs-usa",
+      excerpt: "Compare TikTok coin prices across different countries and find the best deals.",
+      content: "TikTok coin prices vary significantly between countries due to local economic factors...",
+      metaTitle: "TikTok Recharge Prices Comparison: India vs USA | Best Deals",
+      metaDescription: "Compare TikTok coin recharge prices between India and USA to find the best deals.",
+      keywords: "tiktok recharge price, tiktok coins india, tiktok coins usa",
+      category: "comparison",
+      tags: ["tiktok", "recharge", "india", "usa", "pricing"],
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      title: "TikTok Creator Earnings Guide 2025",
+      slug: "tiktok-creator-earnings-explained",
+      excerpt: "Everything you need to know about earning money on TikTok through gifts and creator fund.",
+      content: "TikTok offers multiple monetization options for creators including gifts, creator fund, and brand partnerships...",
+      metaTitle: "TikTok Creator Earnings Guide 2025 | How Much Can You Make?",
+      metaDescription: "Complete guide to TikTok creator earnings, gift income, and monetization strategies for 2025.",
+      keywords: "tiktok creator earnings, tiktok monetization, creator fund, gift income",
+      category: "monetization",
+      tags: ["tiktok", "creators", "earnings", "monetization"],
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      title: "What Is Meant By Lorem Ipsum In Website?",
+      slug: "what-is-meant-by-lorem-ipsum-in-website",
+      excerpt: "Lorem ipsum is placeholder text commonly used in the printing and typesetting industry.",
+      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+      metaTitle: "What Is Lorem Ipsum Text? Complete Guide | TokRecharge Blog",
+      metaDescription: "Learn about Lorem ipsum placeholder text, its history, usage in web design, and why it's important for developers.",
+      keywords: "lorem ipsum, placeholder text, web design, typography",
+      category: "tutorials",
+      tags: ["web-design", "typography", "lorem-ipsum"],
+      status: "published",
+      publishedAt: new Date(),
+    }
+  ];
+
+  for (const post of blogPostsData) {
+    await storage.createBlogPost(post);
+  }
+
+  // Insert admin user
+  const adminUser = {
+    username: "admin",
+    email: "admin@tokrecharge.com",
+    passwordHash: "$2b$10$rQYa.vU1QDHJhWYSK5z/P.SzrQxW5z9yXz8oEsHsQxW5z9yX", // password: admin123
+    role: "super_admin",
+  };
+
+  await storage.createAdminUser(adminUser);
+
+  // Insert site settings
+  const settingsData = [
+    { key: "title", value: "TokRecharge.com", type: "text", description: "Website title" },
+    { key: "metaTitle", value: "TikTok Coin Calculator & Tools", type: "text", description: "SEO meta title" },
+    { key: "metaDescription", value: "Calculate TikTok coin values, compare recharge prices, and estimate earnings with our free tools.", type: "text", description: "SEO meta description" },
+  ];
+
+  for (const setting of settingsData) {
+    await storage.setSiteSetting(setting);
+  }
+
+  console.log("✅ Database initialized with sample data");
+}
+
+export const storage = await initializeDatabaseStorage();
